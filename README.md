@@ -1,6 +1,4 @@
-# vue-router-demo
-
-> a demo for vue-router
+# e-book demo
 
 ## Build Setup
 
