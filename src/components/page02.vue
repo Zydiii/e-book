@@ -9,7 +9,7 @@
     name: '',
     data () {
       return {
-        title: '好好学《小半》别闹'
+
       }
     },
     components: {}

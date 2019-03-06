@@ -68,7 +68,6 @@ display: inline;
 }
 
 table{
-  width: "10px";
   table-layout: fixed;
 }
 .tbl-header{
