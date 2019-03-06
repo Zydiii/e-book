@@ -26,7 +26,7 @@
             <img src="../assets/baiyexing.png" width=200px>
             <table cellspacing="5">
               <tr>
-                <td>Journey Under the Midnight Sun</td>
+                <td>Under the Midnight Sun</td>
               </tr>
               <tr>
                 <td>Keigo Higashino</td>
@@ -107,8 +107,6 @@
               </tr>
             </table>
           </li>
-
-
 
         </ul>
 

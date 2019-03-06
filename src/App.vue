@@ -26,6 +26,10 @@
             route: '/page02'
           },
           {
+            text: 'Detail',
+            route: '/page02'
+          },
+          {
             text: 'Favorite',
             route: '/page02'
           },
@@ -71,6 +75,6 @@
 
   a {
     display: block;
-    width: 160px;
+    width: 100px;
   }
 </style>
