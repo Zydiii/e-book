@@ -25,28 +25,16 @@
           <li>
             <img src="../assets/baiyexing.png" width=200px>
             <table cellspacing="5">
-              <tr>
-                <td>Under the Midnight Sun</td>
-              </tr>
-              <tr>
-                <td>Keigo Higashino</td>
-              </tr>
-              <tr>
-                <td>$16.23</td>
-              </tr>
+                <tr v-for="(item,$index) in items1" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+                    {{item.select}}
+                </tr>
             </table>
           </li>
           <li>
             <img src="../assets/detective.jpg" width=200px>
             <table cellspacing="5">
-              <tr>
-                <td>A Detective Galileo Novel </td>
-              </tr>
-              <tr>
-                <td>Keigo Higashino</td>
-              </tr>
-              <tr>
-                <td>$13.51</td>
+              <tr v-for="(item,$index) in items2" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+                {{item.select}}
               </tr>
             </table>
           </li>
@@ -54,56 +42,32 @@
           <li>
             <img src="../assets/fine.jpg" width=200px>
             <table cellspacing="5">
-              <tr>
-                <td>I'm Fine and Neither Are You</td>
-              </tr>
-              <tr>
-                <td>Camille Pagán</td>
-              </tr>
-              <tr>
-                <td>$4.99</td>
+              <tr v-for="(item,$index) in items3" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+                {{item.select}}
               </tr>
             </table>
           </li>
           <li>
             <img src="../assets/lily.jpg" width=200px>
             <table cellspacing="5">
-              <tr>
-                <td>A Lily in the Light</td>
-              </tr>
-              <tr>
-                <td>Kristin Fields</td>
-              </tr>
-              <tr>
-                <td>$4.99</td>
+              <tr v-for="(item,$index) in items4" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+                {{item.select}}
               </tr>
             </table>
           </li>
           <li>
             <img src="../assets/where.jpg" width=200px>
             <table cellspacing="5">
-              <tr>
-                <td>Where the Crawdads Sing</td>
-              </tr>
-              <tr>
-                <td>Delia Owens</td>
-              </tr>
-              <tr>
-                <td>$12.99</td>
+              <tr v-for="(item,$index) in items5" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+                {{item.select}}
               </tr>
             </table>
           </li>
           <li>
             <img src="../assets/king.jpg" width=200px>
             <table cellspacing="5">
-              <tr>
-                <td>A Clash of Kings</td>
-              </tr>
-              <tr>
-                <td>George R. R. Martin </td>
-              </tr>
-              <tr>
-                <td>$23.99</td>
+              <tr v-for="(item,$index) in items6" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+                {{item.select}}
               </tr>
             </table>
           </li>
@@ -119,14 +83,64 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+
 export default {
   name: 'page01',
   data () {
     return {
-
+      active: true,
+      count: 0,
+      items1: [
+        {select:'Under the Midnight Sun'},
+        {select:'Keigo Higashino'},
+        {select:'$16.23'}
+      ],
+      items2: [
+        {select:'A Detective Galileo Novel'},
+        {select:'Keigo Higashino'},
+        {select:'$13.51'}
+      ],
+      items3:[
+        {select:'I\'m Fine and Neither Are You'},
+        {select:'Camille Pagán'},
+        {select:'$4.99'}
+      ],
+      items4:[
+        {select:'A Lily in the Light'},
+        {select:'Kristin Fields'},
+        {select:'$4.99'}
+      ],
+      items5:[
+        {select:'Where the Crawdads Sing'},
+        {select:'Delia Owens'},
+        {select:'$12.99'}
+      ],
+      items6:[
+        {select:'A Clash of Kings'},
+        {select:'George R. R. Martin'},
+        {select:'$23.99'}
+      ]
+    }
+  },
+  methods: {
+    selectStyle (item, index) {
+      if(index==0){
+        this.$nextTick(function () {
+          this.count++;
+          //this.items1.forEach(function (item) {
+            if(this.count%2)
+              Vue.set(item,'active',true);
+          //});
+          else
+           Vue.set(item,'active',false);
+        });
+      }
     }
   }
 }
+
+
 </script>
 
 <style>
@@ -175,5 +189,15 @@ td{
   width: 400px;
 }
 
+.active{
+  color:red;
+}
+.unactive{
+  　　　　color:#000;
+}
+.icon{
+  　　float: right;
+  　　font-size:12px;
+}
 
 </style>
