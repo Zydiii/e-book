@@ -25,7 +25,7 @@
           <li>
             <img src="../assets/baiyexing.png" width=200px>
             <table cellspacing="5">
-                <tr v-for="(item,$index) in items1" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+                <tr v-for="(item,$index) in items1" @click="selectStyle1 (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
                     {{item.select}}
                 </tr>
             </table>
@@ -33,7 +33,7 @@
           <li>
             <img src="../assets/detective.jpg" width=200px>
             <table cellspacing="5">
-              <tr v-for="(item,$index) in items2" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+              <tr v-for="(item,$index) in items2" @click="selectStyle2 (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
                 {{item.select}}
               </tr>
             </table>
@@ -42,7 +42,7 @@
           <li>
             <img src="../assets/fine.jpg" width=200px>
             <table cellspacing="5">
-              <tr v-for="(item,$index) in items3" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+              <tr v-for="(item,$index) in items3" @click="selectStyle3 (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
                 {{item.select}}
               </tr>
             </table>
@@ -50,7 +50,7 @@
           <li>
             <img src="../assets/lily.jpg" width=200px>
             <table cellspacing="5">
-              <tr v-for="(item,$index) in items4" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+              <tr v-for="(item,$index) in items4" @click="selectStyle4 (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
                 {{item.select}}
               </tr>
             </table>
@@ -58,7 +58,7 @@
           <li>
             <img src="../assets/where.jpg" width=200px>
             <table cellspacing="5">
-              <tr v-for="(item,$index) in items5" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+              <tr v-for="(item,$index) in items5" @click="selectStyle5 (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
                 {{item.select}}
               </tr>
             </table>
@@ -66,7 +66,7 @@
           <li>
             <img src="../assets/king.jpg" width=200px>
             <table cellspacing="5">
-              <tr v-for="(item,$index) in items6" @click="selectStyle (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
+              <tr v-for="(item,$index) in items6" @click="selectStyle6 (item, $index) " :class="{'active':item.active,'unactive':!item.active}" >
                 {{item.select}}
               </tr>
             </table>
@@ -90,7 +90,12 @@ export default {
   data () {
     return {
       active: true,
-      count: 0,
+      count1: 0,
+      count2: 0,
+      count3: 0,
+      count4: 0,
+      count5: 0,
+      count6: 0,
       items1: [
         {select:'Under the Midnight Sun'},
         {select:'Keigo Higashino'},
@@ -124,16 +129,81 @@ export default {
     }
   },
   methods: {
-    selectStyle (item, index) {
+    selectStyle1 (item, index) {
       if(index==0){
         this.$nextTick(function () {
-          this.count++;
+          this.count1++;
           //this.items1.forEach(function (item) {
-            if(this.count%2)
+            if(this.count1%2)
               Vue.set(item,'active',true);
           //});
           else
            Vue.set(item,'active',false);
+        });
+      }
+    },
+    selectStyle2 (item, index) {
+      if(index==0){
+        this.$nextTick(function () {
+          this.count2++;
+          //this.items1.forEach(function (item) {
+          if(this.count2%2)
+            Vue.set(item,'active',true);
+          //});
+          else
+            Vue.set(item,'active',false);
+        });
+      }
+    },
+    selectStyle3 (item, index) {
+      if(index==0){
+        this.$nextTick(function () {
+          this.count3++;
+          //this.items1.forEach(function (item) {
+          if(this.count3%2)
+            Vue.set(item,'active',true);
+          //});
+          else
+            Vue.set(item,'active',false);
+        });
+      }
+    },
+    selectStyle4 (item, index) {
+      if(index==0){
+        this.$nextTick(function () {
+          this.count4++;
+          //this.items1.forEach(function (item) {
+          if(this.count4%2)
+            Vue.set(item,'active',true);
+          //});
+          else
+            Vue.set(item,'active',false);
+        });
+      }
+    },
+    selectStyle5 (item, index) {
+      if(index==0){
+        this.$nextTick(function () {
+          this.count5++;
+          //this.items1.forEach(function (item) {
+          if(this.count5%2)
+            Vue.set(item,'active',true);
+          //});
+          else
+            Vue.set(item,'active',false);
+        });
+      }
+    },
+    selectStyle6 (item, index) {
+      if(index==0){
+        this.$nextTick(function () {
+          this.count6++;
+          //this.items1.forEach(function (item) {
+          if(this.count6%2)
+            Vue.set(item,'active',true);
+          //});
+          else
+            Vue.set(item,'active',false);
         });
       }
     }
