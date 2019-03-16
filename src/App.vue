@@ -2,7 +2,14 @@
   <div>
     <ul>
       <li v-for="item in links"><a @click="$goRoute(item.route)">{{item.text}}</a></li>
+      <li>
+        <el-button @click="startHacking">Log In</el-button>
+      </li>
+      <li>
+        <el-button @click="startHacking">Sign Up</el-button>
+      </li>
     </ul>
+
     <router-view></router-view>
   </div>
 </template>
@@ -36,18 +43,29 @@
           {
             text: 'Cart',
             route: '/page02'
-          },
-          {
-            text: 'Log In',
-            route: '/page02'
           }
         ]
+      }
+    },
+    methods: {
+      startHacking () {
+        this.$notify({
+          title: 'It works!',
+          type: 'success',
+          message: 'We\'ve laid the ground work for you. It\'s time for you to build something epic!',
+          duration: 5000
+        })
       }
     }
   }
 </script>
 
 <style>
+  #app {
+    font-family: Helvetica, sans-serif;
+    text-align: center;
+  }
+
   .text-center {
     text-align: center;
   }

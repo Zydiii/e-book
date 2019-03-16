@@ -2,7 +2,7 @@
   <div>
     <ul class="toolbar">
       <li>
-        <a href="#" class="filter-item active" data-group="all">All Categories</a>
+        <a href="#" class="filter-item" data-group="all">All Categories</a>
         <a href="#" class="filter-item" data-group="fantasy">Fantasy</a>
         <a href="#" class="filter-item" data-group="sci-fi">Sci-Fi</a>
         <a href="#" class="filter-item" data-group="classic">Classics</a>
