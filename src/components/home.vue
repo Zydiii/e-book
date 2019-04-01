@@ -1,152 +1,106 @@
 <template>
-  <div>
-    <div class="home">
-      <ul>
-        <li>
-          <table cellspacing="20">
-            <tr>
-              <td>Popular in Books</td>
-            </tr>
-            <tr>
-              <td>Textbooks</td>
-            </tr>
-            <tr>
-              <td>Books</td>
-            </tr>
-            <tr>
-              <td>Format</td>
-            </tr>
-            <tr>
-              <td>Author</td>
-            </tr>
-            <tr>
-              <td>Book Series</td>
-            </tr>
-            <tr>
-              <td>Language</td>
-            </tr>
-            <tr>
-              <td>Avg. Customer Review</td>
-            </tr>
-            <tr>
-              <td>Condition</td>
-            </tr>
-          </table>
-        </li>
-        <li>
-          <div class="mainland">
-            <img src="../assets/books.jpg" width="930px" height="500px">
+  <div class="container">
+    <Layout class="layout">
+      <Sider class="side-bar" :style="{height: 'calc(100vh - 35px)', background: '#fff', overflow: 'auto'}" ref="side" :collapsed-width="78">
+        <Menu active-name="1-2" theme="light" width="auto" @on-select="onSelect">
+          <div class="user-icon">
+            <div class="user-img">
+              <img src="../../static/img/head.png">
+            </div>
           </div>
-        </li>
-
-      </ul>
-
-
-
-
-
-    </div>
+          <Submenu name="1">
+            <template slot="title">
+              <Icon type="md-navigate"></Icon>
+              <span>收货地址</span>
+            </template>
+            <MenuItem name="myAddress">我的收货地址</MenuItem>
+            <MenuItem name="addAddress">添加收货地址</MenuItem>
+          </Submenu>
+          <Submenu name="2">
+            <template slot="title">
+              <Icon type="md-clipboard"></Icon>
+              <span>购物订单</span>
+            </template>
+            <MenuItem name="myOrder">我的订单</MenuItem>
+          </Submenu>
+          <Submenu name="3">
+            <template slot="title">
+              <Icon type="ios-cart"></Icon>
+              <span>购物车</span>
+            </template>
+            <MenuItem name="myShoppingCart">我的购物车</MenuItem>
+          </Submenu>
+        </Menu>
+      </Sider>
+      <Layout class="layout">
+        <Header :style="{background: '#fff'}">
+          <h2>{{activeTitle}}</h2>
+        </Header>
+        <Content class="content">
+          <transition mode="out-in">
+            <router-view></router-view>
+          </transition>
+        </Content>
+      </Layout>
+    </Layout>
   </div>
 </template>
 
 <script>
-
   export default {
-    name: 'home',
+    name: 'Home',
     data () {
       return {
-
-      }
+        activeTitle: '我的订单',
+        bar: {
+          'myAddress': '我的收货地址',
+          'addAddress': '添加收货地址',
+          'myOrder': '我的订单',
+          'myShoppingCart': '我的购物车'
+        }
+      };
     },
-    components: {}
-  }
+    methods: {
+      onSelect (name) {
+        this.activeTitle = this.bar[name];
+        this.$router.push(`/home/${name}`);
+      }
+    }
+  };
 </script>
 
-<style>
-li{
-display: inline;
-}
-
-table{
-  table-layout: fixed;
-}
-.tbl-header{
-  background-color: rgba(255,255,255,0.3);
-}
-.tbl-content{
-  height:100px;
-  overflow-x:auto;
-  margin-top: 0px;
-  border: 1px solid rgba(255,255,255,0.3);
-}
-th{
-  padding: 2px 5px;
-  text-align: left;
-  font-weight: 100;
-  font-size: 12px;
-  color: #fff;
-  text-transform: uppercase;
-}
-td{
-  padding: 8px;
-  text-align: left;
-  vertical-align:middle;
-  font-weight: 300;
-  font-size: 12px;
-  color: #fff;
-  border-bottom: solid 1px rgba(255,255,255,0.1);
-}
-
-
-/* demo styles */
-
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
-body{
-  background: -webkit-linear-gradient(left, #25c481, #25b7c4);
-  background: linear-gradient(to right, #25c481, #25b7c4);
-  font-family: 'Roboto', sans-serif;
-}
-section{
-  margin: 50px;
-}
-
-
-/* follow me template */
-.made-with-love {
-  margin-top: 40px;
-  padding: 10px;
-  clear: left;
-  text-align: center;
-  font-size: 10px;
-  font-family: arial;
-  color: #fff;
-}
-.made-with-love i {
-  font-style: normal;
-  color: #F50057;
-  font-size: 14px;
-  position: relative;
-  top: 2px;
-}
-.made-with-love a {
-  color: #fff;
-  text-decoration: none;
-}
-.made-with-love a:hover {
-  text-decoration: underline;
-}
-
-
-/* for custom scrollbar for webkit browser*/
-
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-}
-::-webkit-scrollbar-thumb {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-}
-
+<style scoped>
+  .side-bar a{
+    color: #232323;
+  }
+  .user-icon {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .user-icon span {
+    font-size: 96px;
+  }
+  .user-img {
+    margin-bottom: 15px;
+    width: 96px;
+    height: 96px;
+    border-radius: 48px;
+    overflow: hidden;
+  }
+  .user-img img{
+    width: 100%;
+  }
+  .content {
+    margin: 15px;
+    background-color: #fff;
+    padding: 15px;
+  }
+  .layout-footer-center {
+    padding: 0px 15px;
+    padding-bottom: 15px;
+    text-align: center;
+  }
 </style>

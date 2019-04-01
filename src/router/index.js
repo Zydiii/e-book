@@ -1,54 +1,125 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import home from '@/components/home'
-import page01 from '@/components/page01'
-import page02 from '@/components/page02'
-import page01A from '@/components/page01/page01-A'
-import page01B from '@/components/page01/page01-b'
-import pageEnd from '@/components/page01/B/end'
+import Index from '@/components/Index';
+const GoodsList = resolve => require(['@/components/GoodsList'], resolve);
+const GoodsDetail = resolve => require(['@/components/GoodsDetail'], resolve);
+const ShoppingCart = resolve => require(['@/components/ShoppingCart'], resolve);
+const Order = resolve => require(['@/components/Order'], resolve);
+const PayDone = resolve => require(['@/components/PayDone'], resolve);
+const Login = resolve => require(['@/components/Login'], resolve);
+const SignUp = resolve => require(['@/components/SignUp'], resolve);
+const CheckPhone = resolve => require(['@/components/signUp/CheckPhone'], resolve);
+const InputInfo = resolve => require(['@/components/signUp/InputInfo'], resolve);
+const SignUpDone = resolve => require(['@/components/signUp/SignUpDone'], resolve);
+const Home = resolve => require(['@/components/Home'], resolve);
+const MyAddress = resolve => require(['@/components/home/MyAddress'], resolve);
+const AddAddress = resolve => require(['@/components/home/AddAddress'], resolve);
+const MyOrder = resolve => require(['@/components/home/MyOrder'], resolve);
+const MyShoppingCart = resolve => require(['@/components/home/MyShoppingCart'], resolve);
+const Feedback = resolve => require(['@/components/Feedback'], resolve);
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: home
+      path: '/', // 首页
+      name: 'Index',
+      component: Index
     },
     {
-      path: '/home',
-      name: 'home',
-      component: home
+      path: '/goodsList', // 商品列表
+      name: 'GoodsList',
+      component: GoodsList
     },
     {
-      path: '/page01',
-      name: 'page01',
-      component: page01,
+      path: '/goodsDetail', // 商品详情
+      name: 'GoodsDetail',
+      component: GoodsDetail
+    },
+    {
+      path: '/shoppingCart',
+      name: 'ShoppingCart',
+      component: ShoppingCart
+    },
+    {
+      path: '/order', // 订单页面
+      name: 'Order',
+      component: Order
+    },
+    {
+      path: '/payDone', // 支付成功页面
+      name: 'PayDone',
+      component: PayDone
+    },
+    {
+      path: '/Login', // 登陆
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/SignUp', // 注册
+      name: 'SignUp',
+      component: SignUp,
       children: [
         {
-          path: 'page01-a',
-          name: 'page01A',
-          component: page01A
+          path: '/',
+          name: 'index',
+          component: CheckPhone
         },
         {
-          path: 'page01-b',
-          name: 'page01B',
-          component: page01B,
-          children: [
-            {
-              path: 'end',
-              name: 'pageEnd',
-              component: pageEnd
-            }
-          ]
+          path: 'checkPhone',
+          name: 'CheckPhone',
+          component: CheckPhone
+        },
+        {
+          path: 'inputInfo',
+          name: 'InputInfo',
+          component: InputInfo
+        },
+        {
+          path: 'signUpDone',
+          name: 'SignUpDone',
+          component: SignUpDone
         }
       ]
     },
     {
-      path: '/page02',
-      name: 'page02',
-      component: page02
+      path: '/feedback', // 反馈页面
+      name: 'Feedback',
+      component: Feedback
+    },
+    {
+      path: '/home', // 主页
+      name: 'Home',
+      component: Home,
+      children: [
+        {
+          path: '/',
+          name: 'index',
+          component: MyOrder
+        },
+        {
+          path: 'myAddress',
+          name: 'MyAddress',
+          component: MyAddress
+        },
+        {
+          path: 'addAddress',
+          name: 'AddAddress',
+          component: AddAddress
+        },
+        {
+          path: 'myOrder',
+          name: 'MyOrder',
+          component: MyOrder
+        },
+        {
+          path: 'myShoppingCart',
+          name: 'MyShoppingCart',
+          component: MyShoppingCart
+        }
+      ]
     }
   ]
 })
