@@ -1,0 +1,121 @@
+{
+  goodsList: [
+    {
+      "img": "static/img/goodsList/goodsList-item8.jpg",
+      price: 14,
+      intro: '活着',
+      remarks: 3000,
+      color: 0,
+      shopName: '余华 /2012-08-01 /作家出版社',
+      sale: 9600
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item9.jpg',
+      price: 15.00,
+      intro: '房思琪的初恋乐园',
+      remarks: 2800,
+      color: 0,
+      shopName: '林奕含 著，磨铁图书 出品 /2018-02-01 /北京联合出版有限公司',
+      sale: 8900
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item12.jpg',
+      price: 74.5,
+      intro: '平凡的世界',
+      remarks: 9006,
+      color: 0,
+      shopName: '路遥 著，新经典 出品 /2017-06-01 /北京十月文艺出版社',
+      sale: 8530
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item24.jpg',
+      price: 18.6,
+      intro: '白鹿原',
+      remarks: 8666,
+      color: 0,
+      shopName: '陈忠实 /2017-04-13 /作家出版社',
+      sale: 8360
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item25.jpg',
+      price: 19.6,
+      intro: '俗世奇人',
+      remarks: 3000,
+      color: 0,
+      shopName: '冯骥才 /2016-02-29 /作家出版社',
+      sale: 6960
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item15.jpg',
+      price: 21,
+      intro: '裂',
+      remarks: 2800,
+      color: 0,
+      shopName: '孙频 著 联合读创 出品 /2019-01-01 /北京联合出版有限公司',
+      sale: 6560
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item16.jpg',
+      price: 12.6,
+      intro: '呼兰河传',
+      remarks: 9000,
+      color: 0,
+      shopName: '萧红 著 /2014-12-01 /北京联合出版公司',
+      sale: 6360
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item18.jpg',
+      price: 14.4,
+      intro: '一九八四',
+      remarks: 9006,
+      color: 0,
+      shopName: '[英]乔治·奥威尔 著,傅霞 译 /2018-02-05 /时代文艺出版社',
+      sale: 5560
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item23.jpg',
+      price: 18.8,
+      intro: '人生',
+      remarks: 8666,
+      color: 0,
+      shopName: '路遥 著，新经典 出品 /2012-03-01 /北京十月文艺出版社',
+      sale: 5260
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item20.jpg',
+      price: 19.1,
+      intro: '我不',
+      remarks: 6080,
+      color: 0,
+      shopName: '大冰 著，博集天卷 出品 /2017-09-01 /湖南文艺出版社',
+      sale: 3560
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item21.jpg',
+      price: 37.4,
+      intro: '穆斯林的葬礼',
+      remarks: 6080,
+      color: 0,
+      shopName: '霍达 著，新经典 出品 /2015-09-01 /北京十月文艺出版社',
+      sale: 3560
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item22.jpg',
+      price: 24,
+      intro: '丰乳肥臀',
+      remarks: 6080,
+      color: 0,
+      shopName: '莫言 /2017-01-01 /浙江文艺出版社',
+      sale: 3560
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item19.jpg',
+      price: 32.1,
+      intro: '寻找时间的人',
+      remarks: 6080,
+      color: 0,
+      shopName: '作者 凯特·汤普森、译者 闫雪莲；酷威文化 出品 /2017-03-01 /江苏文艺出版社',
+      sale: 3560
+    }
+  ]
+}
