@@ -3,7 +3,7 @@
     <div class="item-detail-show">
       <div class="item-detail-left">
         <div class="item-detail-big-img">
-          <img :src="goodsInfo.goodsImg[imgIndex]" alt="">
+          <img :src="goodsInfo.goodsImg" alt="">
         </div>
         <div class="item-detail-img-row">
           <div class="item-detail-img-small" v-for="(item, index) in goodsInfo.goodsImg" :key="index" @mouseover="showBigImg(index)">
@@ -49,6 +49,7 @@
 <script>
   import store from '@/vuex/store';
   import { mapState, mapActions } from 'vuex';
+  import axios from 'axios'
   export default {
     name: 'ShowGoods',
     data () {
@@ -56,11 +57,11 @@
         price: 0,
         count: 1,
         selectBoxIndex: 0,
-        imgIndex: 0
+        imgIndex: 0,
+        goodsInfo: []
       };
     },
     computed: {
-      ...mapState(['goodsInfo']),
       hirePurchase () {
         const three = this.price * this.count / 3;
         const sex = this.price * this.count / 6;
@@ -99,6 +100,16 @@
       setTimeout(() => {
         father.price = father.goodsInfo.setMeal[0][0].price || 0;
       }, 300);
+    },
+    mounted: function () {
+      axios.get('http://localhost:8088/book/detail')
+        .then((response) => {
+          this.goodsInfo = response.data;
+          console.log(response);
+        }).catch((error) => {
+        console.log(error);
+      });
+
     },
     store
   };

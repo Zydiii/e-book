@@ -15,25 +15,37 @@
   import ShowGoodsDetail from '@/components/goodsDetail/ShowGoodsDetail';
   import store from '@/vuex/store';
   import { mapState, mapActions } from 'vuex';
+  import axios from 'axios'
   export default {
     name: 'GoodsDetail',
     beforeRouteEnter (to, from, next) {
       window.scrollTo(0, 0);
       next();
     },
-    created () {
-      this.loadGoodsInfo();
-    },
+    // created () {
+    //   this.loadGoodsInfo();
+    // },
     data () {
       return {
-        tagsColor: [ 'blue', 'green', 'red', 'yellow' ]
+        tagsColor: [ 'blue', 'green', 'red', 'yellow' ],
+        goodsInfo: []
       };
     },
-    methods: {
-      ...mapActions(['loadGoodsInfo'])
-    },
+    // methods: {
+    //   ...mapActions(['loadGoodsInfo'])
+    // },
     computed: {
-      ...mapState(['goodsInfo', 'isLoading'])
+      ...mapState(['isLoading'])
+    },
+    mounted: function () {
+      axios.get('http://localhost:8088/book/detail')
+        .then((response) => {
+          this.goodsInfo = response.data;
+          console.log(response);
+        }).catch((error) => {
+        console.log(error);
+      });
+
     },
     components: {
       Search,

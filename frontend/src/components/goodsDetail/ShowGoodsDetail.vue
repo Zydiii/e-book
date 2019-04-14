@@ -42,22 +42,22 @@
                 </div>
                 <div class="remarks-analyse-box">
                   <div class="remarks-analyse-goods">
-                    <i-circle :percent="goodsInfo.remarks.goodAnalyse" stroke-color="#e4393c">
-                      <span class="remarks-analyse-num">{{goodsInfo.remarks.goodAnalyse}}%</span>
+                    <i-circle :percent="goodsInfo.remarks" stroke-color="#e4393c">
+                      <span class="remarks-analyse-num">{{goodsInfo.remarks}}%</span>
                       <p class="remarks-analyse-title">好评率</p>
                     </i-circle>
                   </div>
                   <div class="remarks-analyse-tags">
-                    <Tag checkable :color="tagsColor[index % 4]" v-for="(item,index) in goodsInfo.remarks.remarksTags" :key="index">{{item}}</Tag>
+                    <Tag checkable :color="tagsColor[index % 4]" v-for="(item,index) in goodsInfo.remarks" :key="index">{{item}}</Tag>
                   </div>
                 </div>
-                <div class="remarks-bar">
-                  <span>全部({{goodsInfo.remarks.remarksNumDetail[0]}})</span>
-                  <span>好评({{goodsInfo.remarks.remarksNumDetail[1]}})</span>
-                  <span>中评({{goodsInfo.remarks.remarksNumDetail[2]}})</span>
-                  <span>差评({{goodsInfo.remarks.remarksNumDetail[3]}})</span>
-                </div>
-                <div class="remarks-box" v-for="(item,index) in goodsInfo.remarks.detail" :key="index">
+                <!--<div class="remarks-bar">-->
+                  <!--<span>全部({{goodsInfo.remarks.remarksNumDetail[0]}})</span>-->
+                  <!--<span>好评({{goodsInfo.remarks.remarksNumDetail[1]}})</span>-->
+                  <!--<span>中评({{goodsInfo.remarks.remarksNumDetail[2]}})</span>-->
+                  <!--<span>差评({{goodsInfo.remarks.remarksNumDetail[3]}})</span>-->
+                <!--</div>-->
+                <div class="remarks-box" v-for="(item,index) in goodsInfo.remarks" :key="index">
                   <div class="remarks-user">
                     <Avatar icon="person" />
                     <span class="remarks-user-name">{{item.username}}</span>
@@ -84,15 +84,27 @@
 <script>
   import store from '@/vuex/store';
   import { mapState } from 'vuex';
+  import axios from 'axios'
   export default {
     name: 'ShowGoodsDetail',
     data () {
       return {
-        tagsColor: [ 'blue', 'green', 'red', 'yellow' ]
+        tagsColor: [ 'blue', 'green', 'red', 'yellow' ],
+        goodsInfo: []
       };
     },
-    computed: {
-      ...mapState(['goodsInfo'])
+    // computed: {
+    //   ...mapState(['goodsInfo'])
+    // },
+    mounted: function () {
+      axios.get('http://localhost:8088/book/detail')
+        .then((response) => {
+          this.goodsInfo = response.data;
+          console.log(response);
+        }).catch((error) => {
+        console.log(error);
+      });
+
     },
     store
   };

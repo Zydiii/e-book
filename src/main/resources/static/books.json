@@ -1,26 +1,26 @@
 {
-  goodsList: [
+  "goodsList": [
     {
       "img": "static/img/goodsList/goodsList-item8.jpg",
-      price: 14,
-      intro: '活着',
-      remarks: 3000,
-      color: 0,
-      shopName: '余华 /2012-08-01 /作家出版社',
-      sale: 9600
+      "price": 14,
+      "intro": "活着",
+      "remarks": 3000,
+      "color": 0,
+      "shopName": "余华 /2012-08-01 /作家出版社",
+      "sale": 9600
     },
     {
-      img: 'static/img/goodsList/goodsList-item9.jpg',
-      price: 15.00,
-      intro: '房思琪的初恋乐园',
-      remarks: 2800,
-      color: 0,
-      shopName: '林奕含 著，磨铁图书 出品 /2018-02-01 /北京联合出版有限公司',
-      sale: 8900
+      "img": "static/img/goodsList/goodsList-item9.jpg",
+      "price": 15.00,
+      "intro": "房思琪的初恋乐园",
+      "remarks": 2800,
+      "color": 0,
+      "shopName": "林奕含 著，磨铁图书 出品 /2018-02-01 /北京联合出版有限公司",
+      "sale": 8900
     },
     {
-      img: 'static/img/goodsList/goodsList-item12.jpg',
-      price: 74.5,
+      "img": "static/img/goodsList/goodsList-item12.jpg",
+      "price": 74.5,
       intro: '平凡的世界',
       remarks: 9006,
       color: 0,

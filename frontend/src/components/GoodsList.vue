@@ -3,6 +3,29 @@
     <Search></Search>
     <div class="container">
       <div class="goods-box">
+        <div class="as-box">
+          <div class="item-as-title">
+            <span>推广商品</span>
+            <span>广告</span>
+          </div>
+          <div class="item-as" v-for="(item,index) in asItems" :key="index">
+            <div class="item-as-img" @click="link()">
+              <img :src="item.img" alt="" width="150px" height="150px">
+            </div>
+            <div class="item-as-price">
+              <span>
+                <Icon type="social-yen text-danger"></Icon>
+                <span class="seckill-price title">￥{{item.price}}</span>
+              </span>
+            </div>
+            <div class="item-as-intro">
+              <span>{{item.intro}}</span>
+            </div>
+            <div class="item-as-selled">
+              已有<span>{{item.remarks}}</span>人评价
+            </div>
+          </div>
+        </div>
         <div class="goods-list-box">
           <div class="goods-list-tool">
             <ul>
@@ -37,9 +60,6 @@
           </div>
         </div>
       </div>
-      <div class="goods-page">
-        <Page :total="100" show-sizer></Page>
-      </div>
     </div>
     <Footer></Footer>
     <Spin size="large" fix v-if="isLoading"></Spin>
@@ -72,12 +92,13 @@
           {title: '价格', en: 'price'}
         ],
         GoodsList: [
-
+        ],
+        asItems: [
         ]
       };
     },
     computed: {
-      ...mapState(['asItems', 'isLoading']),
+      ...mapState(['isLoading']),
       ...mapGetters(['orderGoodsList'])
     },
     methods: {
@@ -118,11 +139,17 @@
       //this.loadGoodsList();
    // },
     mounted: function () {
-
-      axios.get('http://localhost:8088/book/all')
+      axios.get('http://localhost:8088/book/all1')
         .then((response) => {
-
           this.GoodsList = response.data;
+          console.log(response);
+        }).catch((error) => {
+        console.log(error);
+      });
+
+      axios.get('http://localhost:8088/book/ad1')
+        .then((response) => {
+          this.asItems = response.data;
           console.log(response);
         }).catch((error) => {
         console.log(error);
