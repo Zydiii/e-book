@@ -22,6 +22,7 @@
               <span>购物订单</span>
             </template>
             <MenuItem name="myOrder">我的订单</MenuItem>
+            <MenuItem name="timeOrder">统计订单</MenuItem>
           </Submenu>
           <Submenu name="3">
             <template slot="title">
@@ -29,6 +30,13 @@
               <span>购物车</span>
             </template>
             <MenuItem name="myShoppingCart">我的购物车</MenuItem>
+          </Submenu>
+          <Submenu name="4">
+            <template slot="title">
+              <Icon type="ios-people-outline" />
+              <span>管理用户</span>
+            </template>
+            <MenuItem name="manageUser">用户清单</MenuItem>
           </Submenu>
         </Menu>
       </Sider>
@@ -56,7 +64,9 @@
           'myAddress': '我的收货地址',
           'addAddress': '添加收货地址',
           'myOrder': '我的订单',
-          'myShoppingCart': '我的购物车'
+          'myShoppingCart': '我的购物车',
+          'timeOrder': '管理订单',
+          'manageUser': '用户清单'
         }
       };
     },

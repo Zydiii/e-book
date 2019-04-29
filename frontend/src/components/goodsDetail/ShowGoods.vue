@@ -3,13 +3,13 @@
     <div class="item-detail-show">
       <div class="item-detail-left">
         <div class="item-detail-big-img">
-          <img :src="goodsInfo.goodsImg" alt="">
+          <img :src="goodsInfo.cover" alt="">
         </div>
-        <div class="item-detail-img-row">
-          <div class="item-detail-img-small" v-for="(item, index) in goodsInfo.goodsImg" :key="index" @mouseover="showBigImg(index)">
-            <img :src="item" alt="">
-          </div>
-        </div>
+        <!--<div class="item-detail-img-row">-->
+          <!--<div class="item-detail-img-small" v-for="(item, index) in goodsInfo.goodsImg" :key="index" @mouseover="showBigImg(index)">-->
+            <!--<img :src="item" alt="">-->
+          <!--</div>-->
+        <!--</div>-->
       </div>
       <div class="item-detail-right">
         <div class="item-detail-title">
@@ -29,7 +29,7 @@
             <div class="item-remarks-sum">
               <p>累计评价</p>
               <p>
-                <span class="item-remarks-num">{{goodsInfo.remarksNum}} 条</span>
+                <span class="item-remarks-num">{{goodsInfo.remarknum}} 条</span>
               </p>
             </div>
           </div>
@@ -38,7 +38,7 @@
         <div class="add-buy-car-box">
           <div class="add-buy-car">
             <InputNumber :min="1" v-model="count" size="large"></InputNumber>
-            <Button type="error" size="large" @click="addShoppingCartBtn()" ><Icon type="ios-cart-outline" /> 加入购物车</Button>
+            <Button type="error" size="large" @click="addShoppingCart()" ><Icon type="ios-cart-outline" /> 加入购物车</Button>
           </div>
         </div>
       </div>
@@ -61,6 +61,20 @@
         goodsInfo: []
       };
     },
+    mounted: function () {
+      this.id = this.$route.params.id;
+      axios.get('http://localhost:8088/book/detail?ID='+this.id.toString())
+        .then((response) => {
+          this.goodsInfo = response.data;
+          // console.log("goodsdetail1");
+          // console.log(this.goodsInfo);
+          // console.log("goodsdetail2");
+          // console.log(response);
+        }).catch((error) => {
+        console.log(error);
+      });
+
+    },
     computed: {
       hirePurchase () {
         const three = this.price * this.count / 3;
@@ -72,7 +86,35 @@
       }
     },
     methods: {
-      ...mapActions(['addShoppingCart']),
+      //...mapActions(['addShoppingCart']),
+      addShoppingCart() {
+        if(this.count > this.goodsInfo.remains) {
+          var mes = '库存不够，请购买不超过' + this.goodsInfo.remains.toString() + '本书籍';
+          this.$Message.error(mes);
+        }
+        else{
+          var str = sessionStorage.userInfo;
+          console.log("===============================");
+          console.log(str);
+          console.log("===============================");
+          var s = JSON.parse(str);
+          console.log(s);
+          const data = {
+            userId: s.id,
+            num: this.count,
+            state: 1,
+            bookId: this.goodsInfo.id,
+            remain: this.goodsInfo.remains
+          };
+          axios.post('http://localhost:8088/carts/addCart',data).then((response) => {
+            var status = response.data;
+            console.log(status);
+          });
+          this.$Message.success("书籍成功加入购物车");
+          //this.$router.push({path: '/shoppingCart'});
+        }
+
+      },
       showBigImg (index) {
         this.imgIndex = index;
       },
@@ -91,27 +133,37 @@
           price: this.goodsInfo.price,
           img: img
         };
-        this.addShoppingCart(data);
-        this.$router.push({path: '/shoppingCart'});
+        //this.addShoppingCart(data);
+        //this.$router.push({path: '/shoppingCart'});
       }
     },
-    mounted () {
-      const father = this;
-      setTimeout(() => {
-        father.price = father.goodsInfo.setMeal[0][0].price || 0;
-      }, 300);
-    },
-    mounted: function () {
-      axios.get('http://localhost:8088/book/detail')
-        .then((response) => {
-          this.goodsInfo = response.data;
-          console.log(response);
-        }).catch((error) => {
-        console.log(error);
-      });
-
-    },
-    store
+    // created() {
+    //   var str = sessionStorage.getItem("bookDetail");
+    //   console.log("showGoods");
+    //   console.log(
+    //     (str));
+    //   console.log(
+    //     (str.id))
+    //   //logState = sessionStorage.obj;
+    //   this.goodsInfo = JSON.parse(str);
+    //   console.log(this.goodsInfo);
+    // },
+    // // mounted () {
+    //   const father = this;
+    //   setTimeout(() => {
+    //     father.price = father.goodsInfo.setMeal[0][0].price || 0;
+    //   }, 300);
+    // },
+    // mounted: function () {
+    //   axios.get('http://localhost:8088/book/detail')
+    //     .then((response) => {
+    //       this.goodsInfo = response.data;
+    //       console.log(response);
+    //     }).catch((error) => {
+    //     console.log(error);
+    //   });
+    //
+    // },
   };
 </script>
 
@@ -185,6 +237,7 @@
   .item-price-left {
     display: flex;
     flex-direction: column;
+    margin-right: 400px;
   }
   .item-price-title {
     color: #999999;

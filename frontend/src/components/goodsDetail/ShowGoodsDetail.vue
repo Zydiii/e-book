@@ -6,14 +6,14 @@
           <p>为您推荐</p>
         </div>
         <div class="item-intro-recommend-column">
-          <div class="item-recommend-column" v-for="(item, index) in goodsInfo.hot" :key="index">
+          <div class="item-recommend-column" >
             <div class="item-recommend-img">
-              <img :src="item.img" alt="">
+              <img :src="goodsInfo.cover" alt="">
             </div>
             <div class="item-recommend-intro">
               <span>
-                <span class="item-recommend-top-num">{{index + 1}}</span>{{item.title}}</span>
-              <span class="item-recommend-price">￥{{item.price}}</span>
+                <span class="item-recommend-top-num">{{ 1}}</span>{{goodsInfo.title}}</span>
+              <span class="item-recommend-price">￥{{goodsInfo.price}}</span>
             </div>
           </div>
         </div>
@@ -22,57 +22,68 @@
         <div class="item-intro-nav item-tabs">
           <Tabs>
             <TabPane label="书籍详情">
-              <span class="item-param-box" v-for="(item,index) in goodsInfo.goodsDetail" :key="index">
-                  <div class="remarks-title">{{item.title}}</div>
-                  <span class="item-param-content">{{item.content}}</span>
+              <span class="item-param-box">
+                  <div class="remarks-title">书籍简介</div>
                 </span>
+              {{goodsInfo.intro}}
+              <!--<span class="item-param-box" v-for="(item,index) in goodsInfo.goodsDetail" :key="index">-->
+                  <!--<div class="remarks-title">{{item.title}}</div>-->
+                  <!--<span class="item-param-content">{{item.content}}</span>-->
+                <!--</span>-->
+
             </TabPane>
             <TabPane label="书籍信息">
               <div class="item-param-container">
-                <span class="item-param-box" v-for="(item,index) in goodsInfo.param" :key="index">
-                  <span class="item-param-title">{{item.title}}: </span>
-                  <span class="item-param-content">{{item.content}}</span>
+                <span class="item-param-box">
+                  ISBN: {{goodsInfo.isbn}}
+                </span>
+                <!--<span class="item-param-box" v-for="(item,index) in goodsInfo.param" :key="index">-->
+                  <!--<span class="item-param-title">{{item.title}}: </span>-->
+                  <!--<span class="item-param-content">{{item.content}}</span>-->
+                <!--</span>-->
+                <span class="item-param-box">
+                  <span class="item-param-title"> </span>
                 </span>
               </div>
             </TabPane>
             <TabPane label="书籍评价">
-              <div class="remarks-container">
-                <div class="remarks-title">
-                  <span>书籍评价</span>
-                </div>
-                <div class="remarks-analyse-box">
-                  <div class="remarks-analyse-goods">
-                    <i-circle :percent="goodsInfo.remarks" stroke-color="#e4393c">
-                      <span class="remarks-analyse-num">{{goodsInfo.remarks}}%</span>
-                      <p class="remarks-analyse-title">好评率</p>
-                    </i-circle>
-                  </div>
-                  <div class="remarks-analyse-tags">
-                    <Tag checkable :color="tagsColor[index % 4]" v-for="(item,index) in goodsInfo.remarks" :key="index">{{item}}</Tag>
-                  </div>
-                </div>
-                <!--<div class="remarks-bar">-->
-                  <!--<span>全部({{goodsInfo.remarks.remarksNumDetail[0]}})</span>-->
-                  <!--<span>好评({{goodsInfo.remarks.remarksNumDetail[1]}})</span>-->
-                  <!--<span>中评({{goodsInfo.remarks.remarksNumDetail[2]}})</span>-->
-                  <!--<span>差评({{goodsInfo.remarks.remarksNumDetail[3]}})</span>-->
+              <!--<div class="remarks-container">-->
+                <!--<div class="remarks-title">-->
+                  <!--<span>书籍评价</span>-->
                 <!--</div>-->
-                <div class="remarks-box" v-for="(item,index) in goodsInfo.remarks" :key="index">
-                  <div class="remarks-user">
-                    <Avatar icon="person" />
-                    <span class="remarks-user-name">{{item.username}}</span>
-                  </div>
-                  <div class="remarks-content-box">
-                    <p>
-                      <Rate disabled :value="item.values" allow-half class="remarks-star"></Rate>
-                    </p>
-                    <p class="remarks-content">{{item.content}}</p>
-                    <p class="remarks-sub">
-                      <span class="remarks-time">{{item.time}}</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
+                <!--<div class="remarks-analyse-box">-->
+                  <!--<div class="remarks-analyse-goods">-->
+                    <!--<i-circle :percent="goodsInfo.remarks" stroke-color="#e4393c">-->
+                      <!--<span class="remarks-analyse-num">{{goodsInfo.remarks}}%</span>-->
+                      <!--<p class="remarks-analyse-title">好评率</p>-->
+                    <!--</i-circle>-->
+                  <!--</div>-->
+                  <!--<div class="remarks-analyse-tags">-->
+                    <!--<Tag checkable :color="tagsColor[index % 4]" v-for="(item,index) in goodsInfo.remarks" :key="index">{{item}}</Tag>-->
+                  <!--</div>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;<div class="remarks-bar">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<span>全部({{goodsInfo.remarks.remarksNumDetail[0]}})</span>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<span>好评({{goodsInfo.remarks.remarksNumDetail[1]}})</span>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<span>中评({{goodsInfo.remarks.remarksNumDetail[2]}})</span>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<span>差评({{goodsInfo.remarks.remarksNumDetail[3]}})</span>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--<div class="remarks-box" v-for="(item,index) in goodsInfo.remarks" :key="index">-->
+                  <!--<div class="remarks-user">-->
+                    <!--<Avatar icon="person" />-->
+                    <!--<span class="remarks-user-name">{{item.username}}</span>-->
+                  <!--</div>-->
+                  <!--<div class="remarks-content-box">-->
+                    <!--<p>-->
+                      <!--<Rate disabled :value="item.values" allow-half class="remarks-star"></Rate>-->
+                    <!--</p>-->
+                    <!--<p class="remarks-content">{{item.content}}</p>-->
+                    <!--<p class="remarks-sub">-->
+                      <!--<span class="remarks-time">{{item.time}}</span>-->
+                    <!--</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
             </TabPane>
           </Tabs>
         </div>
@@ -93,19 +104,43 @@
         goodsInfo: []
       };
     },
-    // computed: {
-    //   ...mapState(['goodsInfo'])
-    // },
     mounted: function () {
-      axios.get('http://localhost:8088/book/detail')
+      this.id = this.$route.params.id;
+      axios.get('http://localhost:8088/book/detail?ID='+this.id.toString())
         .then((response) => {
           this.goodsInfo = response.data;
-          console.log(response);
+          // console.log("goodsdetail1");
+          // console.log(this.goodsInfo);
+          // console.log("goodsdetail2");
+          // console.log(response);
         }).catch((error) => {
         console.log(error);
       });
 
     },
+    // created() {
+    //   var str = sessionStorage.bookDetail;
+    //   console.log(
+    //     (str));
+    //   console.log(
+    //     (str.id))
+    //   //logState = sessionStorage.obj;
+    //   this.goodsInfo = JSON.parse(str);
+    //   console.log(this.goodsInfo);
+    // },
+    // computed: {
+    //   ...mapState(['goodsInfo'])
+    // },
+    // mounted: function () {
+    //   axios.get('http://localhost:8088/book/detail')
+    //     .then((response) => {
+    //       this.goodsInfo = response.data;
+    //       console.log(response);
+    //     }).catch((error) => {
+    //     console.log(error);
+    //   });
+    //
+    // },
     store
   };
 </script>

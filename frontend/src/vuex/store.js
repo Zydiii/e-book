@@ -24,36 +24,20 @@ export default new Vuex.Store({
       remarks: []
     },
     userInfo: {
-      username: ''
+      address: "",
+      id: 1,
+      identity: 0,
+      logid: "",
+      name: "",
+      password: "",
+      phone: "",
+      valid: 0
+
     },
     signUpStep: 0,
     marketing: {
       CarouselItems: [],
       activity: []
-    },
-    seckills: {
-      deadline: {
-        hours: 0,
-        minute: 0,
-        seconds: 0
-      },
-      goodsList: []
-    },
-    computer: {
-      deadline: {
-        hours: 0,
-        minute: 0,
-        seconds: 0
-      },
-      goodsList:[]
-    },
-    eat: {
-      deadline: {
-        hours: 0,
-        minute: 0,
-        seconds: 0
-      },
-      goodsList:[]
     },
     asItems: [],
     goodsList: [],

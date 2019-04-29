@@ -6,14 +6,14 @@
         <li><router-link to="/">首页</router-link></li>
       </ul>
       <ul class="detail">
-        <li class="first" v-show="!userInfo.username">
+        <li class="first" v-show=!isIn>
           <router-link to="/login">登录 <Icon type="md-person" /> </router-link>
         </li>
-        <li v-show="!userInfo.username"> <span class="text-color-red"><router-link to="/SignUp">注册 <Icon type="md-person-add" /></router-link></span></li>
-        <li v-show="!!userInfo.username">
+        <li v-show=!isIn> <span class="text-color-red"><router-link to="/SignUp">注册 <Icon type="md-person-add" /></router-link></span></li>
+        <li v-show=isIn>
           <Dropdown>
             <p class="username-p">
-              <Avatar class="person-icon" icon="md-person" size="small" /> <span class="username">{{userInfo.username}} </span>
+              <Avatar class="person-icon" icon="md-person" size="small" /> <span class="username">{{logState.logid}} </span>
             </p>
             <DropdownMenu slot="list">
               <div class="my-page">
@@ -29,7 +29,7 @@
             </DropdownMenu>
           </Dropdown>
         </li>
-        <li>
+        <li v-show=1>
           <router-link to="/order"><Icon type="md-cart" /> 购物车 </router-link>
         </li>
         <li><router-link to="/feedback"> <Icon type="ios-send" />反馈 </router-link></li>
@@ -44,28 +44,58 @@
 
   export default {
     name: 'M-Header',
-    created () {
-      this.isLogin();
+    props:['msg'],
+    watch: {
+      msg:
+        function(val) {
+          var str = sessionStorage.getItem("userInfo");
+          console.log("123123");
+          console.log(str);
+          console.log(sessionStorage.getItem("userInfo"));
+          if (str != "") {
+            this.logState = JSON.parse(str);
+            console.log("Header");
+            console.log(this.logState);
+            console.log(this.logState.id);
+          }
+          if (sessionStorage.getItem("isLog") != "")
+            this.isIn = "true";
+        }
     },
+    // updated: function (){
+    //   var str = sessionStorage.getItem("userInfo");
+    //   console.log("Header");
+    //   console.log(
+    //     (str));
+    //   if(str != ""){
+    //     this.logState = JSON.parse(str);
+    //     console.log("Header");
+    //     console.log(this.logState);
+    //     console.log(this.logState.id);
+    //   }
+    //   if(sessionStorage.getItem("isLog") != "")
+    //     this.isIn = "true";
+    //  },
     data () {
       return {
-
+        logState: [],
+        isIn: ""
       };
     },
-    computed: {
-      ...mapState(['userInfo', 'shoppingCart'])
-    },
     methods: {
-      ...mapActions(['signOut', 'isLogin']),
       myInfo () {
         this.$router.push('/home');
       },
       signOutFun () {
-        this.signOut();
+        this.isIn = "";
+        this.logState = "";
+        this.$emit("logout","logout");
+        sessionStorage.setItem("userInfo","");
+        sessionStorage.setItem("isLog","");
+        //this.signOut();
         this.$router.push('/');
       }
-    },
-    store
+    }
   };
 </script>
 

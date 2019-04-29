@@ -1,0 +1,46 @@
+{
+  "goodsList": [
+    {
+      img: 'static/img/goodsList/goodsList-item1.jpg',
+      price: 35.1,
+      intro: '巧巧兔幼儿经典故事',
+      num: 3140,
+      sale: 9000
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item2.jpg',
+      price: 138,
+      intro: '《7天学会家常主食》',
+      num: 6160,
+      sale: 8900
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item3.jpg',
+      price: 26.3,
+      intro: '流浪地球',
+      num: 9160,
+      sale: 8800
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item4.jpg',
+      price: 225.9,
+      intro: '动物小说',
+      num: 6160,
+      sale: 7990
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item5.jpg',
+      price: 96,
+      intro: '萧红文集',
+      num: 9160,
+      sale: 7600
+    },
+    {
+      img: 'static/img/goodsList/goodsList-item6.jpg',
+      price: 95,
+      intro: '四世同堂',
+      num: 6160,
+      sale: 6900
+    }
+  ]
+}

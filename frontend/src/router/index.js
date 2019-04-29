@@ -16,8 +16,10 @@ const Home = resolve => require(['@/components/Home'], resolve);
 const MyAddress = resolve => require(['@/components/home/MyAddress'], resolve);
 const AddAddress = resolve => require(['@/components/home/AddAddress'], resolve);
 const MyOrder = resolve => require(['@/components/home/MyOrder'], resolve);
+const TimeOrder = resolve => require(['@/components/home/TimeOrder'], resolve);
 const MyShoppingCart = resolve => require(['@/components/home/MyShoppingCart'], resolve);
 const Feedback = resolve => require(['@/components/Feedback'], resolve);
+const ManageUser = resolve => require(['@/components/home/ManageUser'], resolve);
 
 Vue.use(Router)
 
@@ -44,7 +46,7 @@ export default new Router({
       component: GoodsList
     },
     {
-      path: '/goodsDetail', // 商品详情
+      path: '/goodsDetail/:id', // 商品详情
       name: 'GoodsDetail',
       component: GoodsDetail
     },
@@ -121,9 +123,19 @@ export default new Router({
           component: MyOrder
         },
         {
+          path: 'timeOrder',
+          name: 'TimeOrder',
+          component: TimeOrder
+        },
+        {
           path: 'myShoppingCart',
           name: 'MyShoppingCart',
           component: MyShoppingCart
+        },
+        {
+          path: 'manageUser',
+          name: 'ManageUser',
+          component: ManageUser
         }
       ]
     }

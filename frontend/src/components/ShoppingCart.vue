@@ -47,7 +47,7 @@
       next();
     },
     computed: {
-      ...mapState(['newShoppingCart']),
+      //...mapState(['newShoppingCart']),
 
     },
     methods: {

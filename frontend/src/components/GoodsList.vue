@@ -9,8 +9,8 @@
             <span>广告</span>
           </div>
           <div class="item-as" v-for="(item,index) in asItems" :key="index">
-            <div class="item-as-img" @click="link()">
-              <img :src="item.img" alt="" width="150px" height="150px">
+            <div class="item-as-img" @click="link(asItems.id)">
+              <img :src="item.cover" alt="" width="150px" height="150px">
             </div>
             <div class="item-as-price">
               <span>
@@ -19,10 +19,10 @@
               </span>
             </div>
             <div class="item-as-intro">
-              <span>{{item.intro}}</span>
+              <span>{{item.title}}</span>
             </div>
             <div class="item-as-selled">
-              已有<span>{{item.remarks}}</span>人评价
+              已有<span>{{item.salenum}}</span>人购买
             </div>
           </div>
         </div>
@@ -36,9 +36,9 @@
           </div>
           <div class="goods-list">
             <div class="goods-show-info" v-for="(item, index) in GoodsList" :key="index"
-                 v-show="search(item.intro)">
-              <div class="goods-show-img" @click="link()">
-                <img :src="item.img"/>
+                 v-show="search(item.title)">
+              <div class="goods-show-img" @click="link(item.id)">
+                <img :src="item.cover"/>
               </div>
               <div class="goods-show-price">
                 <span>
@@ -48,13 +48,16 @@
               </div>
               <div class="goods-show-detail" @click="selectStyle (item) "
                    :class="{'active':item.active,'unactive':!item.active}">
-                <span>{{item.intro}}</span>
-              </div>
-              <div class="goods-show-num">
-                已有<span>{{item.remarks}}</span>人评价
+                <span>{{item.title}}</span>
               </div>
               <div class="goods-show-seller">
-                <span>{{item.shopName}}</span>
+                <span>{{item.writer}}</span>
+              </div>
+              <div class="goods-show-num">
+                已有<span>{{item.salenum}}</span>人购买
+              </div>
+              <div class="goods-show-seller">
+                <span>{{item.shopname}}</span>
               </div>
             </div>
           </div>
@@ -62,7 +65,7 @@
       </div>
     </div>
     <Footer></Footer>
-    <Spin size="large" fix v-if="isLoading"></Spin>
+    <!--<Spin size="large" fix v-if="isLoading"></Spin>-->
   </div>
 </template>
 
@@ -94,25 +97,28 @@
         GoodsList: [
         ],
         asItems: [
-        ]
+        ],
+        detailBook: ''
       };
     },
     computed: {
-      ...mapState(['isLoading']),
-      ...mapGetters(['orderGoodsList'])
+     // ...mapState(['isLoading']),
+     // ...mapGetters(['orderGoodsList'])
     },
     methods: {
-      ...mapActions(['loadGoodsList']),
-      ...mapMutations(['SET_GOODS_ORDER_BY']),
-      orderBy(data, index) {
-        this.icon = ['md-arrow-dropdown', 'md-arrow-dropdown', 'md-arrow-dropdown'];
-        this.isAction = [false, false, false];
-        this.isAction[index] = true;
-        this.icon[index] = 'md-arrow-dropup';
-        this.SET_GOODS_ORDER_BY(data);
-      },
-      link() {
-        this.$router.push('/goodsDetail');
+      //...mapActions(['loadGoodsList']),
+     // ...mapMutations(['SET_GOODS_ORDER_BY']),
+     //  orderBy(data, index) {
+     //    this.icon = ['md-arrow-dropdown', 'md-arrow-dropdown', 'md-arrow-dropdown'];
+     //    this.isAction = [false, false, false];
+     //    this.isAction[index] = true;
+     //    this.icon[index] = 'md-arrow-dropup';
+     //    this.SET_GOODS_ORDER_BY(data);
+     //  },
+      link(id) {
+        this.detailBook = id.toString();
+        sessionStorage.bookDetail = "";
+        this.$router.push('/goodsDetail/'+this.detailBook);
       },
       search(title) {
         if (this.$route.query.searchData === undefined) {
@@ -147,7 +153,7 @@
         console.log(error);
       });
 
-      axios.get('http://localhost:8088/book/ad1')
+      axios.get('http://localhost:8088/book/all1')
         .then((response) => {
           this.asItems = response.data;
           console.log(response);

@@ -4,7 +4,6 @@
     <ShowGoods></ShowGoods>
     <ShowGoodsDetail></ShowGoodsDetail>
     <Footer></Footer>
-    <Spin size="large" fix v-if="isLoading"></Spin>
   </div>
 </template>
 
@@ -35,16 +34,23 @@
     //   ...mapActions(['loadGoodsInfo'])
     // },
     computed: {
-      ...mapState(['isLoading'])
+      //...mapState(['isLoading'])
     },
     mounted: function () {
-      axios.get('http://localhost:8088/book/detail')
+      this.id = this.$route.params.id;
+      axios.get('http://localhost:8088/book/detail?ID='+this.id.toString())
         .then((response) => {
           this.goodsInfo = response.data;
-          console.log(response);
+          // console.log("goodsdetail1");
+          // console.log(this.goodsInfo);
+          // console.log("goodsdetail2");
+          // console.log(response);
         }).catch((error) => {
         console.log(error);
       });
+
+    },
+    updated: function(){
 
     },
     components: {

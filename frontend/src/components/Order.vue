@@ -3,36 +3,36 @@
     <div class="goods-list-container">
       <Alert show-icon class="tips-box">请点击商品前的选择框，选择购物车中的商品，点击付款即可。</Alert>
       <Table border ref="selection" :columns="columns" :data="shoppingCart" size="large" @on-selection-change="select" no-data-text="您的购物车没有商品，请先添加商品到购物车再点击购买"></Table>
-      <div class="address-container">
-        <h3>收货人信息</h3>
-        <div class="address-box">
-          <div class="address-check">
-            <div class="address-check-name">
-              <span> {{checkAddress.name}}</span>
-            </div>
-            <div class="address-detail">
-              <p>{{checkAddress.address}}</p>
-            </div>
-          </div>
-          <Collapse>
-            <Panel>
-              选择地址
-              <p slot="content">
-                <RadioGroup vertical size="large" @on-change="changeAddress">
-                  <Radio :label="item.addressId" v-for="(item, index) in address" :key="index">
-                    <span>{{item.name}} {{item.province}} {{item.city}} {{item.address}} {{item.phone}} {{item.postalcode}}</span>
-                  </Radio>
-                </RadioGroup>
-              </p>
-            </Panel>
-          </Collapse>
-        </div>
-      </div>
+      <!--<div class="address-container">-->
+        <!--<h3>收货人信息</h3>-->
+        <!--<div class="address-box">-->
+          <!--<div class="address-check">-->
+            <!--<div class="address-check-name">-->
+              <!--<span> {{checkAddress.name}}</span>-->
+            <!--</div>-->
+            <!--<div class="address-detail">-->
+              <!--<p>{{checkAddress.address}}</p>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;<Collapse>&ndash;&gt;-->
+            <!--&lt;!&ndash;<Panel>&ndash;&gt;-->
+              <!--&lt;!&ndash;选择地址&ndash;&gt;-->
+              <!--&lt;!&ndash;<p slot="content">&ndash;&gt;-->
+                <!--&lt;!&ndash;<RadioGroup vertical size="large" @on-change="changeAddress">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<Radio :label="item.addressId" v-for="(item, index) in address" :key="index">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span>{{item.name}} {{item.province}} {{item.city}} {{item.address}} {{item.phone}} {{item.postalcode}}</span>&ndash;&gt;-->
+                  <!--&lt;!&ndash;</Radio>&ndash;&gt;-->
+                <!--&lt;!&ndash;</RadioGroup>&ndash;&gt;-->
+              <!--&lt;!&ndash;</p>&ndash;&gt;-->
+            <!--&lt;!&ndash;</Panel>&ndash;&gt;-->
+          <!--&lt;!&ndash;</Collapse>&ndash;&gt;-->
+        <!--</div>-->
+      <!--</div>-->
       <div class="pay-container">
         <div class="pay-box">
           <p><span>提交订单应付总额：</span> <span class="money"><Icon type="social-yen"></Icon> {{totalPrice.toFixed(2)}}</span></p>
           <div class="pay-btn">
-            <router-link to="/payDone"><Button type="error" size="large">支付订单</Button></router-link>
+            <router-link to="/payDone"><Button type="error" size="large" @click="pay()">支付订单</Button></router-link>
           </div>
         </div>
       </div>
@@ -47,6 +47,7 @@
   import Footer from '@/components/footer/Footer';
   import store from '@/vuex/store';
   import { mapState, mapActions } from 'vuex';
+  import axios from 'axios'
   export default {
     name: 'Order',
     beforeRouteEnter (to, from, next) {
@@ -54,11 +55,12 @@
       next();
     },
     created () {
-      this.loadAddress();
+      //this.loadAddress();
     },
     data () {
       return {
         goodsCheckList: [],
+        shoppingCart: [],
         columns: [
           {
             type: 'selection',
@@ -71,8 +73,13 @@
             align: 'center'
           },
           {
+            title: 'ISBN',
+            key: 'isbn',
+            align: 'center'
+          },
+          {
             title: '数量',
-            key: 'count',
+            key: 'num',
             width: 68,
             align: 'center'
           },
@@ -90,20 +97,43 @@
         remarks: ''
       };
     },
+    created(){
+      console.log("order");
+      var str = sessionStorage.getItem("userInfo");
+      var s = JSON.parse(str).id;
+      axios.get('http://localhost:8088/carts/getCart?userID='+s.toString())
+        .then((response) => {
+          this.shoppingCart = response.data;
+          console.log(response);
+        }).catch((error) => {
+        console.log(error);
+      });
+    },
     computed: {
-      ...mapState(['address', 'shoppingCart']),
+      //...mapState(['address']),
       totalPrice () {
         let price = 0;
         this.goodsCheckList.forEach(item => {
-          price += item.price * item.count;
+          price += item.price * item.num;
         });
         return price;
       }
     },
     methods: {
-      ...mapActions(['loadAddress']),
+      pay(){
+        axios.post('http://localhost:8088/carts/doneSubmit', this.goodsCheckList).then((response)=> {
+          var status = response.data;
+          console.log(status);
+          }
+        ).catch((error) => {
+          console.log(response);
+        });
+      },
+      //...mapActions(['loadAddress']),
       select (selection, row) {
         this.goodsCheckList = selection;
+        console.log("check");
+        console.log(this.goodsCheckList);
       },
       changeAddress (data) {
         const father = this;
