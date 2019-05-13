@@ -88,6 +88,12 @@
     methods: {
       //...mapActions(['addShoppingCart']),
       addShoppingCart() {
+        var str = sessionStorage.userInfo;
+        if(str == ""){
+          this.$Message.error('请先登陆再购买');
+          return;
+        }
+
         if(this.count > this.goodsInfo.remains) {
           var mes = '库存不够，请购买不超过' + this.goodsInfo.remains.toString() + '本书籍';
           this.$Message.error(mes);
@@ -104,7 +110,8 @@
             num: this.count,
             state: 1,
             bookId: this.goodsInfo.id,
-            remain: this.goodsInfo.remains
+            remain: this.goodsInfo.remains,
+            writer: this.goodsInfo.writer
           };
           axios.post('http://localhost:8088/carts/addCart',data).then((response) => {
             var status = response.data;

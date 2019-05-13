@@ -18,13 +18,10 @@
           <FormItem label="手机号码" prop="phone">
             <i-input v-model="formData.phone" size="large"></i-input>
           </FormItem>
-          <FormItem label="邮政编码" prop="postalcode">
-            <i-input v-model="formData.postalcode" size="large"></i-input>
-          </FormItem>
         </Form>
       </div>
       <div class="add-submit">
-        <Button type="primary">添加地址</Button>
+        <Button type="primary" @click="addAddress">添加地址</Button>
       </div>
     </div>
   </div>
@@ -32,18 +29,19 @@
 
 <script>
 import Distpicker from 'v-distpicker';
+import axios from 'axios'
 export default {
   name: 'AddAddress',
   data () {
     return {
       formData: {
+        userId: 0,
         name: '',
         address: '',
         phone: '',
-        postalcode: '',
-        province: '广东省',
-        city: '广州市',
-        area: '天河区'
+        province: '',
+        city: '',
+        area: ''
       },
       ruleInline: {
         name: [
@@ -62,7 +60,23 @@ export default {
       }
     };
   },
+  created() {
+    var str = sessionStorage.getItem("userInfo");
+    var s = JSON.parse(str);
+    this.formData.userId = s.id;
+    console.log(s.id);
+  },
   methods: {
+    addAddress() {
+      console.log(this.formData.userId);
+      console.log(this.formData);
+      axios.post('http://localhost:8088/user/addAddress', this.formData)
+        .then((response) => {
+          console.log(response);
+          this.$Message.success("您已经成功添加地址");
+          this.$router.push('/home/myAddress');
+        })
+    },
     getProvince (data) {
       this.formData.province = data.value;
     },

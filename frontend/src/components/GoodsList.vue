@@ -36,7 +36,7 @@
           </div>
           <div class="goods-list">
             <div class="goods-show-info" v-for="(item, index) in GoodsList" :key="index"
-                 v-show="search(item.title)">
+                 v-show="search(item.title, item.writer)">
               <div class="goods-show-img" @click="link(item.id)">
                 <img :src="item.cover"/>
               </div>
@@ -52,6 +52,12 @@
               </div>
               <div class="goods-show-seller">
                 <span>{{item.writer}}</span>
+              </div>
+              <div class="goods-show-seller">
+              ISBN：<span>{{item.isbn}}</span>
+            </div>
+              <div class="goods-show-seller">
+                库存：<span>{{item.remains}}</span>
               </div>
               <div class="goods-show-num">
                 已有<span>{{item.salenum}}</span>人购买
@@ -120,13 +126,16 @@
         sessionStorage.bookDetail = "";
         this.$router.push('/goodsDetail/'+this.detailBook);
       },
-      search(title) {
+      search(title, writer) {
         if (this.$route.query.searchData === undefined) {
           return true;
         }
-        if (title === this.$route.query.searchData) {
+        if (title.indexOf(this.$route.query.searchData) > -1 ) {
           return true;
-        } else
+        }
+        if (writer.indexOf(this.$route.query.searchData) > -1) {
+          return true;
+        }
           return false;
       },
       selectStyle(item) {

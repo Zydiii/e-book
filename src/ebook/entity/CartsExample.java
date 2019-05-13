@@ -1,4 +1,4 @@
-package ebook.entity.entity;
+package ebook.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -612,6 +612,76 @@ public class CartsExample {
 
         public Criteria andRemainNotBetween(Integer value1, Integer value2) {
             addCriterion("remain not between", value1, value2, "remain");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterIsNull() {
+            addCriterion("writer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterIsNotNull() {
+            addCriterion("writer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterEqualTo(String value) {
+            addCriterion("writer =", value, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterNotEqualTo(String value) {
+            addCriterion("writer <>", value, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterGreaterThan(String value) {
+            addCriterion("writer >", value, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterGreaterThanOrEqualTo(String value) {
+            addCriterion("writer >=", value, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterLessThan(String value) {
+            addCriterion("writer <", value, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterLessThanOrEqualTo(String value) {
+            addCriterion("writer <=", value, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterLike(String value) {
+            addCriterion("writer like", value, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterNotLike(String value) {
+            addCriterion("writer not like", value, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterIn(List<String> values) {
+            addCriterion("writer in", values, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterNotIn(List<String> values) {
+            addCriterion("writer not in", values, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterBetween(String value1, String value2) {
+            addCriterion("writer between", value1, value2, "writer");
+            return (Criteria) this;
+        }
+
+        public Criteria andWriterNotBetween(String value1, String value2) {
+            addCriterion("writer not between", value1, value2, "writer");
             return (Criteria) this;
         }
     }

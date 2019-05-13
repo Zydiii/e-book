@@ -1,13 +1,30 @@
 <template>
   <div class="container">
     <p><Icon type="ios-checkmark-circle-outline" ></Icon></p>
-    <router-link to="/login"><Button type="success" size="large" long class="btn-success">注册成功</Button></router-link>
+    <Button type="success" size="large" long class="btn-success" @click="handleSubmit">注册成功</Button>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
+
 export default {
-  name: 'SignUpDone'
+  name: 'SignUpDone',
+  methods: {
+    handleSubmit() {
+      axios.post('http://localhost:8088/user/add', {
+        'phone': sessionStorage.getItem("phone"),
+        'logid': sessionStorage.getItem("logid"),
+        'email': sessionStorage.getItem("email"),
+        'password': sessionStorage.getItem("password")
+      }).then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
+      this.$router.push({ path: '/Login' });
+    }
+  }
 };
 </script>
 

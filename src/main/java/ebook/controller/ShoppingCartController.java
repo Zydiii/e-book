@@ -84,6 +84,7 @@ public class ShoppingCartController {
             cartinfo.setCart_id(getList.get(i).getId());
             cartinfo.setBook_id(getList.get(i).getBookId());
             cartinfo.setUser_id(getList.get(i).getUserId());
+            cartinfo.setWriter(getList.get(i).getWriter());
             l.add(cartinfo);
         }
         return l;
@@ -91,7 +92,7 @@ public class ShoppingCartController {
 
     @RequestMapping(path = "/doneSubmit", method = RequestMethod.POST)
     @ResponseBody
-    public Cart doneSubmit(@RequestBody List<CartInfo> cart) {
+    public Cart doneSubmit(@RequestParam String address, @RequestParam String name, @RequestParam String phone, @RequestBody List<CartInfo> cart) {
         float sum = 0;
         int user_id = cart.get(0).getUser_id();
         for (int i = 0; i < cart.size(); i++) {
@@ -132,6 +133,9 @@ public class ShoppingCartController {
         Date d = new Date();
         orders.setOdertime(d);
         orders.setMoney(sum);
+        orders.setReceiveraddress(address);
+        orders.setReceivername(name);
+        orders.setReceiverphone(phone);
         UUID uuid = UUID.randomUUID();
         String str = uuid.toString();
         orders.setId(str);
@@ -149,6 +153,7 @@ public class ShoppingCartController {
             items.setOrderId(str);
             items.setNum(sale);
             items.setBookId(book_id);
+            items.setSee(1);
             itemsMapper.insert(items);
         }
         Cart c = new Cart();

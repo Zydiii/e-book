@@ -11,8 +11,10 @@
 
 <script>
   import axios from 'axios'
+  import MyOrderExpand from './MyOrderExpand.vue';
 
   export default {
+    components: {MyOrderExpand},
     name: 'MyOrder',
     created() {
       var str = sessionStorage.getItem("userInfo");
@@ -21,7 +23,7 @@
       axios.get('http://localhost:8088/home/order?ID=' + this.id.toString()).then((response) => {
         this.order = response.data;
         this.orderShow = this.order;
-        console.log(response);
+        console.log(typeof(response.data[0].order_time));
       }).catch((error) => {
         console.log(error);
       });
@@ -69,26 +71,32 @@
         searchData: "",
         columns: [
           {
-            title: '订单号',
-            key: 'order_id',
-            width: 180,
+            type: 'expand',
+            width: 50,
+            render: (h, params) => {
+              return h(MyOrderExpand, {
+                props: {
+                  row: params.row
+                }
+              })
+            }
+          },
+          {
+            title: '图片',
+            key: 'img',
+            width: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('img', {
+                  attrs: {
+                    src: params.row.cover,
+                    width: "80px"
+                  }
+                })
+              ]);
+            },
             align: 'center'
           },
-          // {
-          //   title: '图片',
-          //   key: 'img',
-          //   width: 86,
-          //   render: (h, params) => {
-          //     return h('div', [
-          //       h('img', {
-          //         attrs: {
-          //           src: params.row.img
-          //         }
-          //       })
-          //     ]);
-          //   },
-          //   align: 'center'
-          // },
           {
             title: '标题',
             key: 'title',
@@ -107,9 +115,9 @@
             align: 'center'
           },
           {
-            title: '购买时间',
-            width: 120,
-            key: 'order_time',
+            title: 'ISBN',
+            width: 150,
+            key: 'isbn',
             align: 'center'
           },
           {
@@ -143,7 +151,7 @@
                       this.remove(params.index,params.row.order_id, params.row.book_id);
                     }
                   }
-                }, 'Delete')
+                }, 'delete')
               ]);
             }
           }

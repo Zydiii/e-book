@@ -8,7 +8,7 @@
               <img src="../../static/img/head.png">
             </div>
           </div>
-          <Submenu name="1">
+          <Submenu name="1" v-show=!this.isManager>
             <template slot="title">
               <Icon type="md-navigate"></Icon>
               <span>收货地址</span>
@@ -16,7 +16,7 @@
             <MenuItem name="myAddress">我的收货地址</MenuItem>
             <MenuItem name="addAddress">添加收货地址</MenuItem>
           </Submenu>
-          <Submenu name="2">
+          <Submenu name="2" v-show=!this.isManager>
             <template slot="title">
               <Icon type="md-clipboard"></Icon>
               <span>购物订单</span>
@@ -24,19 +24,33 @@
             <MenuItem name="myOrder">我的订单</MenuItem>
             <MenuItem name="timeOrder">统计订单</MenuItem>
           </Submenu>
-          <Submenu name="3">
-            <template slot="title">
-              <Icon type="ios-cart"></Icon>
-              <span>购物车</span>
-            </template>
-            <MenuItem name="myShoppingCart">我的购物车</MenuItem>
-          </Submenu>
-          <Submenu name="4">
+          <!--<Submenu name="3" v-show=!this.isManager>-->
+            <!--<template slot="title">-->
+              <!--<Icon type="ios-cart"></Icon>-->
+              <!--<span>购物车</span>-->
+            <!--</template>-->
+            <!--<MenuItem name="myShoppingCart">我的购物车</MenuItem>-->
+          <!--</Submenu>-->
+          <Submenu name="4" v-show=this.isManager>
             <template slot="title">
               <Icon type="ios-people-outline" />
-              <span>管理用户</span>
+              <span>用户管理</span>
             </template>
             <MenuItem name="manageUser">用户清单</MenuItem>
+          </Submenu>
+          <Submenu name="5" v-show=this.isManager>
+            <template slot="title">
+              <Icon type="md-clipboard"></Icon>
+              <span>订单管理</span>
+            </template>
+            <MenuItem name="manageOrder">所有订单</MenuItem>
+          </Submenu>
+          <Submenu name="6" v-show=this.isManager>
+            <template slot="title">
+              <Icon type="md-clipboard"></Icon>
+              <span>书籍管理</span>
+            </template>
+            <MenuItem name="manageBook">书籍清单</MenuItem>
           </Submenu>
         </Menu>
       </Sider>
@@ -57,16 +71,25 @@
 <script>
   export default {
     name: 'Home',
+    created() {
+      var str = sessionStorage.getItem("userInfo");
+      var s = JSON.parse(str);
+      this.isManager = s.identity;
+    },
     data () {
       return {
-        activeTitle: '我的订单',
+        activeTitle: '欢迎登陆',
+        isManager: 0,
         bar: {
           'myAddress': '我的收货地址',
           'addAddress': '添加收货地址',
           'myOrder': '我的订单',
-          'myShoppingCart': '我的购物车',
+          //'myShoppingCart': '我的购物车',
           'timeOrder': '管理订单',
-          'manageUser': '用户清单'
+          'manageUser': '用户清单',
+          'default': '欢迎登陆',
+          'manageOrder': '订单管理',
+          'manageBook': '书籍清单'
         }
       };
     },

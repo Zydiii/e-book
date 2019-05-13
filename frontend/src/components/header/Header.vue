@@ -29,7 +29,7 @@
             </DropdownMenu>
           </Dropdown>
         </li>
-        <li v-show=1>
+        <li v-show=isIn>
           <router-link to="/order"><Icon type="md-cart" /> 购物车 </router-link>
         </li>
         <li><router-link to="/feedback"> <Icon type="ios-send" />反馈 </router-link></li>

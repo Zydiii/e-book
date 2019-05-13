@@ -9,7 +9,15 @@ public class CartInfo {
     int book_id;
     int cart_id;
     int user_id;
+    String writer;
 
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
 
     public int getBook_id() {
         return book_id;

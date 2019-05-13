@@ -20,6 +20,9 @@ const TimeOrder = resolve => require(['@/components/home/TimeOrder'], resolve);
 const MyShoppingCart = resolve => require(['@/components/home/MyShoppingCart'], resolve);
 const Feedback = resolve => require(['@/components/Feedback'], resolve);
 const ManageUser = resolve => require(['@/components/home/ManageUser'], resolve);
+const ManageBook = resolve => require(['@/components/home/ManageBook'], resolve);
+const Default = resolve => require(['@/components/home/Default'], resolve);
+const ManageOrder = resolve => require(['@/components/home/ManageOrder'], resolve);
 
 Vue.use(Router)
 
@@ -104,8 +107,23 @@ export default new Router({
       children: [
         {
           path: '/',
-          name: 'index',
-          component: MyOrder
+          name: 'default',
+          component: Default
+        },
+        // {
+        //   path: '/',
+        //   name: 'index',
+        //   component: MyOrder
+        // },
+        {
+          path: 'manageBook',
+          name: 'ManageBook',
+          component: ManageBook
+        },
+        {
+          path: 'manageOrder',
+          name: 'ManageOrder',
+          component: ManageOrder
         },
         {
           path: 'myAddress',

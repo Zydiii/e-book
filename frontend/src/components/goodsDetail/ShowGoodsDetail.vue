@@ -37,6 +37,9 @@
                 <span class="item-param-box">
                   ISBN: {{goodsInfo.isbn}}
                 </span>
+                <!--<span class="item-param-box">-->
+                  <!--出版时间: {{goodsInfo.time}}-->
+                <!--</span>-->
                 <!--<span class="item-param-box" v-for="(item,index) in goodsInfo.param" :key="index">-->
                   <!--<span class="item-param-title">{{item.title}}: </span>-->
                   <!--<span class="item-param-content">{{item.content}}</span>-->
@@ -245,7 +248,7 @@
     justify-content: space-between;
   }
   .item-param-box {
-    width: 160px;
+    width: 200px;
     height: 36px;
     font-size: 12px;
   }

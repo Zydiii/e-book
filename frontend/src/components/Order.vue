@@ -3,31 +3,34 @@
     <div class="goods-list-container">
       <Alert show-icon class="tips-box">请点击商品前的选择框，选择购物车中的商品，点击付款即可。</Alert>
       <Table border ref="selection" :columns="columns" :data="shoppingCart" size="large" @on-selection-change="select" no-data-text="您的购物车没有商品，请先添加商品到购物车再点击购买"></Table>
-      <!--<div class="address-container">-->
-        <!--<h3>收货人信息</h3>-->
-        <!--<div class="address-box">-->
-          <!--<div class="address-check">-->
-            <!--<div class="address-check-name">-->
-              <!--<span> {{checkAddress.name}}</span>-->
-            <!--</div>-->
-            <!--<div class="address-detail">-->
-              <!--<p>{{checkAddress.address}}</p>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--&lt;!&ndash;<Collapse>&ndash;&gt;-->
-            <!--&lt;!&ndash;<Panel>&ndash;&gt;-->
-              <!--&lt;!&ndash;选择地址&ndash;&gt;-->
-              <!--&lt;!&ndash;<p slot="content">&ndash;&gt;-->
-                <!--&lt;!&ndash;<RadioGroup vertical size="large" @on-change="changeAddress">&ndash;&gt;-->
-                  <!--&lt;!&ndash;<Radio :label="item.addressId" v-for="(item, index) in address" :key="index">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<span>{{item.name}} {{item.province}} {{item.city}} {{item.address}} {{item.phone}} {{item.postalcode}}</span>&ndash;&gt;-->
-                  <!--&lt;!&ndash;</Radio>&ndash;&gt;-->
-                <!--&lt;!&ndash;</RadioGroup>&ndash;&gt;-->
-              <!--&lt;!&ndash;</p>&ndash;&gt;-->
-            <!--&lt;!&ndash;</Panel>&ndash;&gt;-->
-          <!--&lt;!&ndash;</Collapse>&ndash;&gt;-->
-        <!--</div>-->
-      <!--</div>-->
+      <div class="address-container">
+        <h3>收货人信息</h3>
+        <div class="address-box">
+          <div class="address-check">
+            <div class="address-check-name">
+              <span> {{checkAddress.receiverName}}</span>
+            </div>
+            <div class="address-detail">
+              <p>{{checkAddress.receiverAddress}}</p>
+            </div>
+            <div class="address-detail">
+              <p>{{checkAddress.receiverPhone}}</p>
+            </div>
+          </div>
+          <Collapse>
+            <Panel>
+              选择地址
+              <p slot="content">
+                <RadioGroup vertical size="large" @on-change="changeAddress">
+                  <Radio :label="item.id" v-for="(item, index) in address" :key="index">
+                    <span>{{item.name}} {{item.province}} {{item.city}} {{item.address}} {{item.phone}}</span>
+                  </Radio>
+                </RadioGroup>
+              </p>
+            </Panel>
+          </Collapse>
+        </div>
+      </div>
       <div class="pay-container">
         <div class="pay-box">
           <p><span>提交订单应付总额：</span> <span class="money"><Icon type="social-yen"></Icon> {{totalPrice.toFixed(2)}}</span></p>
@@ -54,13 +57,11 @@
       window.scrollTo(0, 0);
       next();
     },
-    created () {
-      //this.loadAddress();
-    },
     data () {
       return {
         goodsCheckList: [],
         shoppingCart: [],
+        address: [],
         columns: [
           {
             type: 'selection',
@@ -68,13 +69,36 @@
             align: 'center'
           },
           {
+            title: '图片',
+            key: 'img',
+            render: (h, params) => {
+              return h('div', [
+                h('img', {
+                  attrs: {
+                    src: params.row.cover,
+                    width: '100px'
+                  }
+                })
+              ]);
+            },
+            align: 'center'
+          },
+          {
             title: '标题',
             key: 'title',
+            width: 180,
+            align: 'center'
+          },
+          {
+            title: '作者',
+            key: 'writer',
+            width: 250,
             align: 'center'
           },
           {
             title: 'ISBN',
             key: 'isbn',
+            width: 200,
             align: 'center'
           },
           {
@@ -91,8 +115,9 @@
           }
         ],
         checkAddress: {
-          name: '未选择',
-          address: '请选择地址'
+          receiverAddress: '',
+          receiverName: '',
+          receiverPhone: ''
         },
         remarks: ''
       };
@@ -108,6 +133,15 @@
         }).catch((error) => {
         console.log(error);
       });
+
+      axios.get('http://localhost:8088/user/getAddress?ID=' + s)
+        .then((response) => {
+          console.log("Address");
+          this.address = response.data;
+          console.log(response);
+        }).catch((error) => {
+        console.log(error);
+      })
     },
     computed: {
       //...mapState(['address']),
@@ -121,7 +155,10 @@
     },
     methods: {
       pay(){
-        axios.post('http://localhost:8088/carts/doneSubmit', this.goodsCheckList).then((response)=> {
+        axios.post('http://localhost:8088/carts/doneSubmit?address=' +
+          this.checkAddress.receiverAddress.toString() + '&name=' + this.checkAddress.receiverName.toString()
+          + '&phone=' + this.checkAddress.receiverPhone.toString(), this.goodsCheckList
+        ).then((response)=> {
           var status = response.data;
           console.log(status);
           }
@@ -138,9 +175,10 @@
       changeAddress (data) {
         const father = this;
         this.address.forEach(item => {
-          if (item.addressId === data) {
-            father.checkAddress.name = item.name;
-            father.checkAddress.address = `${item.name} ${item.province} ${item.city} ${item.address} ${item.phone} ${item.postalcode}`;
+          if (item.id === data) {
+            father.checkAddress.receiverName = item.name;
+            father.checkAddress.receiverAddress = `${item.province} ${item.city} ${item.address}`;
+            father.checkAddress.receiverPhone = item.phone;
           }
         });
       }

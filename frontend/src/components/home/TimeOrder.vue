@@ -2,7 +2,7 @@
     <div>
       <div>
         <div>
-          <i-input v-model="value1" class="search" placeholder="开始时间" > </i-input> 年
+          <i-input v-model="value1" class="search" placeholder="开始时间"> </i-input> 年
           <i-input v-model="value2" class="search" placeholder="开始时间" > </i-input> 月
           <i-input v-model="value3" class="search" placeholder="开始时间" > </i-input> 日
         </div>
@@ -19,25 +19,47 @@
 
 <script>
   import axios from 'axios'
-
+  import MyOrderExpand from './MyOrderExpand.vue';
     export default {
         name: "ManageOrder",
+      components: {MyOrderExpand},
       data() {
         return {
           order: [],
           orderShow: [],
           id: 0,
-          value1: '',
-          value2: '',
-          value3: '',
-          value4: '',
-          value5: '',
-          value6: '',
+          value1: '2018',
+          value2: '9',
+          value3: '13',
+          value4: '2020',
+          value5: '9',
+          value6: '13',
           columns: [
             {
-              title: '订单号',
-              key: 'order_id',
-              width: 180,
+              type: 'expand',
+              width: 50,
+              render: (h, params) => {
+                return h(MyOrderExpand, {
+                  props: {
+                    row: params.row
+                  }
+                })
+              }
+            },
+            {
+              title: '图片',
+              key: 'img',
+              width: 100,
+              render: (h, params) => {
+                return h('div', [
+                  h('img', {
+                    attrs: {
+                      src: params.row.cover,
+                      width: "80px"
+                    }
+                  })
+                ]);
+              },
               align: 'center'
             },
             {
@@ -58,12 +80,78 @@
               align: 'center'
             },
             {
-              title: '购买时间',
-              width: 120,
-              key: 'order_time',
+              title: 'ISBN',
+              width: 150,
+              key: 'isbn',
               align: 'center'
             }
+            // {
+            //   title: '操作',
+            //   key: 'action',
+            //   width: 150,
+            //   align: 'center',
+            //   render: (h, params) => {
+            //     return h('div', [
+            //       // h('Button', {
+            //       //   props: {
+            //       //     type: 'primary',
+            //       //     size: 'small'
+            //       //   },
+            //       //   style: {
+            //       //     marginRight: '5px'
+            //       //   },
+            //       //   on: {
+            //       //     click: () => {
+            //       //       this.show(params.index)
+            //       //     }
+            //       //   }
+            //       // }, 'View'),
+            //       // h('Button', {
+            //       //   props: {
+            //       //     type: 'error',
+            //       //     size: 'small'
+            //       //   },
+            //       //   on: {
+            //       //     click: () => {
+            //       //       this.remove(params.index,params.row.order_id, params.row.book_id);
+            //       //     }
+            //       //   }
+            //       // }, 'Delete')
+            //     ]);
+              //}
+            //}
           ]
+          // columns: [
+          //   {
+          //     title: '订单号',
+          //     key: 'order_id',
+          //     width: 180,
+          //     align: 'center'
+          //   },
+          //   {
+          //     title: '标题',
+          //     key: 'title',
+          //     align: 'center'
+          //   },
+          //   {
+          //     title: '数量',
+          //     key: 'num',
+          //     width: 68,
+          //     align: 'center'
+          //   },
+          //   {
+          //     title: '价格',
+          //     width: 68,
+          //     key: 'price',
+          //     align: 'center'
+          //   },
+          //   {
+          //     title: '购买时间',
+          //     width: 120,
+          //     key: 'order_time',
+          //     align: 'center'
+          //   }
+          // ]
         }
       },
       created()

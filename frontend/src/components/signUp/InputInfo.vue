@@ -21,6 +21,7 @@
 <script>
 import store from '@/vuex/store';
 import { mapMutations, mapActions } from 'vuex';
+import axios from 'axios'
 export default {
   name: 'InputInfo',
   data () {
@@ -63,21 +64,39 @@ export default {
     ...mapActions(['addSignUpUser']),
     handleSubmit (name) {
       const father = this;
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          this.$Message.success('注册成功');
-          const userinfo = {
-            username: this.formValidate.name,
-            password: this.formValidate.password,
-            mail: this.formValidate.mail,
-            phone: this.$route.query.phone
-          };
-          this.addSignUpUser(userinfo);
-          father.SET_SIGN_UP_SETP(2);
-          this.$router.push({ path: '/SignUp/signUpDone' });
-        } else {
-          this.$Message.error('注册失败');
-        }
+      var isName;
+      axios.get('http://localhost:8088/user/check?logid='+ father.formValidate.name.toString()
+        + '&email=' + father.formValidate.mail.toString())
+        .then((response) => {
+          isName = response.data.status;
+          console.log(response);
+          if(isName == 0)
+            this.$Message.error('用户名已存在');
+          else if (isName == -1)
+            this.$Message.error('该邮箱已经被绑定');
+          else{
+            this.$refs[name].validate((valid) => {
+              if (valid) {
+                sessionStorage.setItem("logid", this.formValidate.name);
+                sessionStorage.setItem("email", this.formValidate.mail);
+                sessionStorage.setItem("password", this.formValidate.password);
+                this.$Message.success('注册成功');
+                const userinfo = {
+                  username: this.formValidate.name,
+                  password: this.formValidate.password,
+                  mail: this.formValidate.mail,
+                  phone: this.$route.query.phone
+                };
+                this.addSignUpUser(userinfo);
+                father.SET_SIGN_UP_SETP(2);
+                this.$router.push({ path: '/SignUp/signUpDone' });
+              } else {
+                this.$Message.error('注册失败');
+              }
+            });
+          }
+        }).catch((error) => {
+          console.log(error);
       });
     }
   },

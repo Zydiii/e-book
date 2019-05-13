@@ -21,6 +21,7 @@ public class BookListController1 {
     public List<Books> getBookAll(){
         BooksExample booksExample = new BooksExample();
         BooksExample.Criteria criteria = booksExample.createCriteria();
+        criteria.andValidEqualTo(1);
         return booksMapper.selectByExample(booksExample);
     }
 

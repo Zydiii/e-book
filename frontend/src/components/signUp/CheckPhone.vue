@@ -17,10 +17,12 @@
 <script>
 import store from '@/vuex/store';
 import { mapMutations } from 'vuex';
+import axios from 'axios'
 export default {
   name: 'CheckPhone',
   data () {
     return {
+      check: [],
       formValidate: {
         phone: '',
         checkNum: ''
@@ -42,7 +44,7 @@ export default {
     getcheckNum () {
       if (this.formValidate.phone.length === 11) {
         this.$Message.success({
-          content: '验证码为: 1234',
+          content: '验证码为: 4839',
           duration: 6,
           closable: true
         });
@@ -55,18 +57,36 @@ export default {
       }
     },
     handleSubmit (name) { // 提交验证
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          this.$router.push({ path: '/SignUp/inputInfo', query: { phone: this.formValidate.phone } });
-          this.SET_SIGN_UP_SETP(1);
-        } else {
-          this.$Message.error({
-            content: '请填写正确的信息',
-            duration: 6,
-            closable: true
-          });
-        }
+      axios.get('http://localhost:8088/user/checkPhone?phone='+ this.formValidate.phone.toString())
+        .then((response) => {
+          console.log("check1");
+          this.check = response.data;
+          console.log(response);
+          console.log("check2");
+          console.log(this.check);
+          if(this.check.status === 0)
+            this.$Message.error("该手机号已经被注册");
+          else{
+            this.$refs[name].validate((valid) => {
+              if (valid) {
+                this.$router.push({ path: '/SignUp/inputInfo', query: { phone: this.formValidate.phone } });
+                this.SET_SIGN_UP_SETP(1);
+                sessionStorage.setItem("phone", this.formValidate.phone);
+              } else {
+                this.$Message.error({
+                  content: '验证失败',
+                  duration: 6,
+                  closable: true
+                });
+              }
+            });
+          }
+        }).catch((error) => {
+        console.log(error);
       });
+
+
+
     }
   },
   store

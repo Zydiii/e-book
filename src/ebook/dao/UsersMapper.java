@@ -1,4 +1,4 @@
-package ebook.dao;
+package ebook.entity.dao;
 
 import ebook.entity.Users;
 import ebook.entity.UsersExample;
