@@ -10,19 +10,27 @@
       <Icon type="md-add"/>
       添加书籍
     </Button>
-    <Modal v-model="modal" width="530" @on-ok="addAction" loading>
+    <Modal v-model="modal" width="530" @on-ok="ok" :loading="loading">
       <p slot="header">
         <Icon type="edit"></Icon>
         <span>请填写书籍信息</span>
       </p>
       <div>
-        <Form ref="form1" :model="formData" label-position="left" :label-width="100" :rules="ruleInline">
+        <Form ref="formData" :model="formData" label-position="left" :label-width="100" :rules="ruleInline">
           <FormItem label="标题" prop="title">
             <i-input v-model="formData.title" size="large"></i-input>
           </FormItem>
+          <!--<FormItem label="封面" prop="cover">-->
+            <!--<input type="file" @change="getFile($event)">-->
+          <!--</FormItem>-->
           <FormItem label="封面" prop="cover">
-            <i-input v-model="formData.cover" size="large"></i-input>
+            <Upload action="http://localhost:8088/image/upload">
+              <Button icon="ios-cloud-upload-outline">请上传图片</Button>
+            </Upload>
           </FormItem>
+          <!--<FormItem label="封面" prop="cover">-->
+            <!--<i-input v-model="formData.cover" size="large"></i-input>-->
+          <!--</FormItem>-->
           <FormItem label="作者" prop="writer">
             <i-input v-model="formData.writer" size="large"></i-input>
           </FormItem>
@@ -58,8 +66,6 @@
   export default {
     name: "ManageBook",
     created() {
-      var self = this;
-      self.loading = true;
       axios.get('http://localhost:8088/manager/books').then((response) => {
         this.books = response.data;
         var i = 0;
@@ -68,37 +74,54 @@
           this.books[i].saving = 0;
         }
         this.bookShow = this.books;
-        self.loading = false;
-        //this.init();
-        // console.log("bookShow");
-        // console.log(this.bookShow);
       }).catch((error) => {
         console.log(error);
       });
-
     },
     methods: {
+      getFile: function (event) {
+        this.file = event.target.files[0];
+        console.log(this.file);
+      },
+      changeLoading() {
+        this.loading = false;
+        this.$nextTick(() => {
+          this.loading = true;
+        });
+      },
+      ok () {
+        this.$refs['formData'].validate(valid => {
+          if(!valid) {
+            this.$Message.error('书籍信息存在错误');
+            return this.changeLoading();
+          }
+          setTimeout(() => {
+            axios.post('http://localhost:8088/manager/addBook', this.formData)
+              .then((response) => {
+                this.modal = false;
+                this.$Message.success('成功添加书籍');
+                console.log(response);
+                this.changeLoading();
+                axios.get('http://localhost:8088/manager/books').then((response) => {
+                  this.books = response.data;
+                  var i = 0;
+                  for (; i < this.books.length; i++) {
+                    this.books[i].editting = 0;
+                    this.books[i].saving = 0;
+                  }
+                  this.bookShow = this.books;
+                }).catch((error) => {
+                  console.log(error);
+                })
+              }).catch((error) => {
+              console.log(error);
+              this.$Message.error('连接出错，请稍后再试');
+            })
+          }, 1000);
+        });
+      },
       edit(index) {
         this.modal = true;
-      },
-      addAction() {
-        this.$refs["form1"].validate((valid) => {
-          if (valid) {
-            this.$Message.success('注册请求已发送!');
-            this.modal = false;
-          } else {
-            this.$Message.error('信息存在错误!');
-            // loading = fals
-          }
-        });
-        // axios.post('http://localhost:8088/manager/addBook', this.formData)
-        //   .then((response) => {
-        //     this.modal = false;
-        //     this.$Message.success('添加成功');
-        //     console.log(response);
-        //   }).catch((error) => {
-        //   console.log(error);
-        // })
       },
 
       handleEdit(row) {
@@ -179,8 +202,8 @@
           title: '',
           writer: '',
           ISBN: '',
-          remains: '',
-          price: '',
+          remains: 0,
+          price: 0.0,
           intro: '',
           shopName: ''
         },
@@ -195,16 +218,21 @@
             {required: true, message: 'ISBN编号不能为空', trigger: 'blur'}
           ],
           remains: [
-            {required: true, message: '库存不能为空', trigger: 'blur'}
+            {required: true, message: '库存不能为空', trigger: 'blur'},
+            {type: 'string', pattern:/^(([1-9]\d{0,3})|0)?$/, message: '库存量只能为正整数且不超过9999', trigger: 'blur'}
           ],
           price: [
-            {required: true, message: '价格不能为空', trigger: 'blur'}
+            {required: true, message: '价格不能为空', trigger: 'blur'},
+            {type: 'string', pattern:/^(([1-9]\d{0,3})|0)(\.\d{0,2})?$/, message: '价格只能为正浮点数且不超过9999.99', trigger: 'blur'}
           ],
           intro: [
             {required: true, message: '简介不能为空', trigger: 'blur'}
           ],
           shopName: [
             {required: true, message: '出版社不能为空', trigger: 'blur'}
+          ],
+          cover: [
+            {required: true, message: '封面不能为空', trigger: 'blur'}
           ]
         },
         columns: [

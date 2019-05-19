@@ -23,6 +23,7 @@ const ManageUser = resolve => require(['@/components/home/ManageUser'], resolve)
 const ManageBook = resolve => require(['@/components/home/ManageBook'], resolve);
 const Default = resolve => require(['@/components/home/Default'], resolve);
 const ManageOrder = resolve => require(['@/components/home/ManageOrder'], resolve);
+const tmp = resolve => require(['@/components/temp'], resolve);
 
 Vue.use(Router)
 

@@ -6,10 +6,18 @@ import ebook.entity.Books;
 import ebook.entity.BooksExample;
 import ebook.entity.Userinfo;
 import ebook.entity.UserinfoExample;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/manager")
@@ -20,6 +28,41 @@ public class ManagerController {
     @Autowired
     BooksMapper booksMapper;
 
+//    @RequestMapping(path = "/addPic", method = RequestMethod.POST)
+//    @ResponseBody
+//    public String addPic(@RequestParam(value = "upfile", required = true) MultipartFile[] upfile) throws Exception {
+//        Map<String, String> map = new HashMap<String, String>();
+//        if (upfile != null && upfile.length > 0) {
+//            // 循环获取file数组中得文件
+//            for (int i = 0; i < upfile.length; i++) {
+//                MultipartFile uploadFile = upfile[i];
+//                File source = new File( uploadFile.getOriginalFilename() );// 文件
+//                String fileName = uploadFile.getOriginalFilename();
+//                uploadFile.transferTo( source );//MultipartFile 转file
+//                if (source.isFile()) {
+//                    // 得到File后的操作
+//                    PicUploader pictureUpload = new PicUploader();
+//                    try {
+//                        Response res = pictureUpload.upload( source, uploadFile.getOriginalFilename() );
+//                        QiniuResponseResult qiniuResponseResult = res.jsonToObject( QiniuResponseResult.class );
+//                        map.put( "url", QINIU_IMG_SERVER_URL + qiniuResponseResult.getKey() );
+//                        map.put( "name", fileName );
+//                        map.put( "size", uploadFile.getSize()+"");
+//                        map.put( "state", "SUCCESS" );
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                        map.put( "state", "FAIL" );//上传失败
+//                    }
+//                }
+//
+//            }
+//        }
+//
+//        System.out.println("OK");
+//
+//        return "OK";
+//    }
+
     @RequestMapping(path = "/books", method = RequestMethod.GET)
     @ResponseBody
     public List<Books> getBookAll(){
@@ -27,6 +70,30 @@ public class ManagerController {
         BooksExample.Criteria criteria = booksExample.createCriteria();
         criteria.andValidEqualTo(1);
         return booksMapper.selectByExample(booksExample);
+    }
+
+    @RequestMapping(path = "/addBook", method = RequestMethod.POST)
+    @ResponseBody
+    public String addBook(@RequestBody Map<String, String> formData){
+        Books newBook = new Books();
+        newBook.setCover(formData.get("cover"));
+        newBook.setPrice(Float.parseFloat(formData.get("price")));
+        newBook.setTitle(formData.get("title"));
+        newBook.setShopname(formData.get("shopName"));
+        newBook.setWriter(formData.get("writer"));
+        newBook.setRemains(Integer.parseInt(formData.get("remains")));
+        newBook.setIsbn(formData.get("ISBN"));
+        newBook.setIntro(formData.get("intro"));
+        newBook.setValid(1);
+        newBook.setColor(0);
+        newBook.setRemarknum(0);
+        newBook.setSalenum(0);
+        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
+        sdf.applyPattern("yyyy-MM-dd HH:mm:ss a");// a为am/pm的标记
+        Date date = new Date();// 获取当前时间
+        newBook.setTime(date);
+        booksMapper.insert(newBook);
+        return "OK";
     }
 
     @RequestMapping(path = "/updateBook", method = RequestMethod.POST)

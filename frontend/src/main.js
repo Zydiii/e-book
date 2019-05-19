@@ -11,10 +11,15 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
 Vue.use(BootstrapVue)
 
 Vue.use(iView);
 Vue.config.productionTip = false
+
+Vue.use(ElementUI);
 
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start();
