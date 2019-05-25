@@ -38,7 +38,7 @@
             <div class="goods-show-info" v-for="(item, index) in GoodsList" :key="index"
                  v-show="search(item.title, item.writer)">
               <div class="goods-show-img" @click="link(item.id)">
-                <img :src="item.cover"/>
+                <img :src="item.cover" />
               </div>
               <div class="goods-show-price">
                 <span>

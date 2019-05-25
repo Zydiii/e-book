@@ -46,6 +46,7 @@
             </template>
             <MenuItem name="manageOrder">所有订单</MenuItem>
             <MenuItem name="seeOrder">统计订单</MenuItem>
+            <MenuItem name="seeUser">用户消费</MenuItem>
           </Submenu>
           <Submenu name="6" v-show=this.isManager>
             <template slot="title">
@@ -93,7 +94,8 @@
           'manageOrder': '订单管理',
           'manageBook': '书籍清单',
           'evalOrder': '评价订单',
-          'seeOrder': '统计订单'
+          'seeOrder': '统计订单',
+          'seeUser':'用户消费'
         }
       };
     },

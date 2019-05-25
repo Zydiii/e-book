@@ -2,6 +2,7 @@ package ebook.controller;
 
 import ebook.dao.BooksMapper;
 import ebook.dao.ItemsMapper;
+import ebook.dao.OrdersMapper;
 import ebook.dao.UserinfoMapper;
 import ebook.entity.*;
 import org.apache.catalina.connector.Response;
@@ -12,10 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/manager")
@@ -29,40 +27,89 @@ public class ManagerController {
     @Autowired
     ItemsMapper itemsMapper;
 
-//    @RequestMapping(path = "/addPic", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String addPic(@RequestParam(value = "upfile", required = true) MultipartFile[] upfile) throws Exception {
-//        Map<String, String> map = new HashMap<String, String>();
-//        if (upfile != null && upfile.length > 0) {
-//            // 循环获取file数组中得文件
-//            for (int i = 0; i < upfile.length; i++) {
-//                MultipartFile uploadFile = upfile[i];
-//                File source = new File( uploadFile.getOriginalFilename() );// 文件
-//                String fileName = uploadFile.getOriginalFilename();
-//                uploadFile.transferTo( source );//MultipartFile 转file
-//                if (source.isFile()) {
-//                    // 得到File后的操作
-//                    PicUploader pictureUpload = new PicUploader();
-//                    try {
-//                        Response res = pictureUpload.upload( source, uploadFile.getOriginalFilename() );
-//                        QiniuResponseResult qiniuResponseResult = res.jsonToObject( QiniuResponseResult.class );
-//                        map.put( "url", QINIU_IMG_SERVER_URL + qiniuResponseResult.getKey() );
-//                        map.put( "name", fileName );
-//                        map.put( "size", uploadFile.getSize()+"");
-//                        map.put( "state", "SUCCESS" );
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                        map.put( "state", "FAIL" );//上传失败
-//                    }
-//                }
-//
-//            }
-//        }
-//
-//        System.out.println("OK");
-//
-//        return "OK";
-//    }
+    @Autowired
+    OrdersMapper ordersMapper;
+
+    @RequestMapping(path = "/SeeUser", method = RequestMethod.GET)
+    @ResponseBody
+    public List<SeeUser> seeUser(@RequestParam String date1, @RequestParam String date2) throws Exception{
+        UserinfoExample userinfoExample = new UserinfoExample();
+        List<Userinfo> users = userinfoMapper.selectByExample(userinfoExample);
+        List<SeeUser> seeUsers = new ArrayList<SeeUser>();
+        Date date11 = new SimpleDateFormat("yyyy-MM-dd").parse(date1);
+        Date date22 = new SimpleDateFormat("yyyy-MM-dd").parse(date2);
+        for(int ii = 0; ii < users.size(); ii++) {
+            OrdersExample ordersExample = new OrdersExample();
+            OrdersExample.Criteria criteria = ordersExample.createCriteria();
+            criteria.andUserIdEqualTo(users.get(ii).getId()).andOdertimeBetween(date11, date22);
+            List<Orders> o = ordersMapper.selectByExample(ordersExample);
+            float pays = 0;
+            int nums = 0;
+            for (int jj = 0; jj < o.size(); jj++) {
+                pays += o.get(jj).getMoney();
+                ItemsExample itemsExample = new ItemsExample();
+                ItemsExample.Criteria criteria1 = itemsExample.createCriteria();
+                criteria1.andOrderIdEqualTo(o.get(jj).getId());
+                List<Items> o1 = itemsMapper.selectByExample(itemsExample);
+                for (int kk = 0; kk < o1.size(); kk++) {
+                    nums += o1.get(kk).getNum();
+                }
+            }
+            SeeUser s = new SeeUser();
+            s.setLogid(users.get(ii).getLogid());
+            s.setNums(nums);
+            s.setPays(pays);
+            seeUsers.add(s);
+        }
+        return seeUsers;
+    }
+
+    @RequestMapping(path = "/SeeOrder", method = RequestMethod.GET)
+    @ResponseBody
+    public List<SeeOrder> seeOrder(@RequestParam String date1, @RequestParam String date2) throws Exception{
+        Date date11 = new SimpleDateFormat("yyyy-MM-dd").parse(date1);
+        Date date22 = new SimpleDateFormat("yyyy-MM-dd").parse(date2);
+
+        List<SeeOrder> orders = new ArrayList<SeeOrder>();
+        BooksExample booksExample = new BooksExample();
+        BooksExample.Criteria criteria = booksExample.createCriteria();
+        criteria.andValidEqualTo(1);
+        List<Books> o = booksMapper.selectByExample(booksExample);
+        for(int i = 0; i < o.size(); i++){
+            ItemsExample itemsExample = new ItemsExample();
+            ItemsExample.Criteria criteria1 = itemsExample.createCriteria();
+            criteria1.andBookIdEqualTo(o.get(i).getId());
+            List<Items> o1 = itemsMapper.selectByExample(itemsExample);
+            int num = 0;
+            for(int j = 0; j < o1.size(); j++){
+                OrdersExample ordersExample = new OrdersExample();
+                OrdersExample.Criteria criteria2 = ordersExample.createCriteria();
+                criteria2.andIdEqualTo(o1.get(j).getOrderId()).andOdertimeBetween(date11, date22);
+                List<Orders> o2 = ordersMapper.selectByExample(ordersExample);
+                for(int k = 0; k < o2.size(); k++){
+                    ItemsExample itemsExample1 = new ItemsExample();
+                    ItemsExample.Criteria criteria3 = itemsExample1.createCriteria();
+                    criteria3.andBookIdEqualTo(o.get(i).getId()).andOrderIdEqualTo(o2.get(k).getId());
+                    List<Items> o3 = itemsMapper.selectByExample(itemsExample1);
+                    for(int kk = 0; kk < o3.size(); kk++){
+                        num += o3.get(kk).getNum();
+                    }
+                }
+            }
+            SeeOrder seeOrder = new SeeOrder();
+            seeOrder.setSales(num);
+            seeOrder.setCover(o.get(i).getCover());
+            seeOrder.setWriter(o.get(i).getWriter());
+            seeOrder.setIsbn(o.get(i).getIsbn());
+            seeOrder.setShopname(o.get(i).getShopname());
+            seeOrder.setTitle(o.get(i).getTitle());
+            seeOrder.setPrice(o.get(i).getPrice());
+            seeOrder.setRemarknum(o.get(i).getRemarknum());
+
+            orders.add(seeOrder);
+        }
+        return orders;
+    }
 
     @RequestMapping(path = "/books", method = RequestMethod.GET)
     @ResponseBody

@@ -275,25 +275,25 @@
             width: 100,
             align: 'center',
             render: (h, params) => {
-              if (params.row.$isEdit){
-                return h('input', {
-                  domProps: {
-                    //value: params.row.cover,
-                    type: "file",
-                    style: "width: 100%; align: center; margin: 0"
-                  },
-                  on: {
-                    getFile: function (event) {
-                      this.file = event.target.files[0];
-                      console.log(this.file);
-                    },
-                    // input: function (event) {
-                    //   params.row.cover = event.target.value
-                    // }
-                  }
-                });
-              }
-              else{
+              // if (params.row.$isEdit){
+              //   return h('input', {
+              //     domProps: {
+              //       //value: params.row.cover,
+              //       type: "file",
+              //       style: "width: 100%; align: center; margin: 0"
+              //     },
+              //     on: {
+              //       getFile: function (event) {
+              //         this.file = event.target.files[0];
+              //         console.log(this.file);
+              //       },
+              //       // input: function (event) {
+              //       //   params.row.cover = event.target.value
+              //       // }
+              //     }
+              //   });
+              // }
+              //else{
                 return h('div', [
                   h('img', {
                     attrs: {
@@ -302,7 +302,7 @@
                     }
                   })
                 ]);
-              }
+             // }
             }
           },
           {

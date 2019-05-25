@@ -25,6 +25,7 @@ const Default = resolve => require(['@/components/home/Default'], resolve);
 const ManageOrder = resolve => require(['@/components/home/ManageOrder'], resolve);
 const EvalOrder = resolve => require(['@/components/home/EvalOrder'], resolve);
 const SeeOrder = resolve => require(['@/components/home/SeeOrder'], resolve);
+const SeeUser = resolve => require(['@/components/home/SeeUser'], resolve);
 
 Vue.use(Router)
 
@@ -146,6 +147,11 @@ export default new Router({
           path: 'seeOrder',
           name: 'SeeOrder',
           component: SeeOrder
+        },
+        {
+          path: 'seeUser',
+          name: 'SeeUser',
+          component: SeeUser
         },
         {
           path: 'timeOrder',
