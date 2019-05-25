@@ -5,7 +5,7 @@
         <Button slot="append" icon="md-search" @click="handleSearch" ></Button>
       </i-input>
     </div>
-    <Table border :columns="columns" :data="orderShow" no-data-text="还没有用户下单~"></Table>
+    <Table border :columns="columns" :data="orderShow" no-data-text="您还没有已经完成的订单~"></Table>
   </div>
 </template>
 
@@ -15,12 +15,12 @@
 
   export default {
     components: {MyOrderExpand},
-    name: 'ManageOrder',
+    name: 'EvalOrder',
     created() {
       var str = sessionStorage.getItem("userInfo");
       var s = JSON.parse(str);
       this.id = s.id;
-      axios.get('http://localhost:8088/home/orderAll').then((response) => {
+      axios.get('http://localhost:8088/home/order?ID=' + this.id.toString()).then((response) => {
         this.order = response.data;
         this.orderShow = this.order;
         console.log(typeof(response.data[0].order_time));
@@ -29,26 +29,26 @@
       });
     },
     methods: {
-      start(order_id, book_id){
-        axios.get("http://localhost:8088/manager/sendOrder?order_id=" + order_id + "&book_id=" + book_id )
+      recorder(order_id, book_id){
+        axios.get("http://localhost:8088/home/recOrder?order_id=" + order_id + "&book_id=" + book_id)
           .then((response) => {
             console.log(response);
-             if(response.data == "1"){
-               this.$Message.success("您已成功发货，等待卖家收货");
-               axios.get('http://localhost:8088/home/orderAll').then((response) => {
-                 this.order = response.data;
-                 this.orderShow = this.order;
-                 console.log(typeof(response.data[0].order_time));
-               }).catch((error) => {
-                 console.log(error);
-               });
-             }
-             else if(response.data === "0"){
-               this.$Message.error("连接出错，请重试");
-             }
-             else{
-               this.$Message.error("库存不足");
-             }
+            if(response.data == "1"){
+              this.$Message.success("您已成功收货，请及时评价");
+              var str = sessionStorage.getItem("userInfo");
+              var s = JSON.parse(str);
+              this.id = s.id;
+              axios.get('http://localhost:8088/home/order?ID=' + this.id.toString()).then((response) => {
+                this.order = response.data;
+                this.orderShow = this.order;
+                console.log(typeof(response.data[0].order_time));
+              }).catch((error) => {
+                console.log(error);
+              })
+            }
+            else{
+              this.$Message.error("连接出错，请重试");
+            }
           })
       },
       search(data, argumentObj) {
@@ -143,43 +143,37 @@
             align: 'center'
           },
           {
-            title: '状态',
-            width: 68,
-            key: 'state',
-            align: 'center'
-          },
-          {
             title: '操作',
             key: 'action',
-            width: 150,
+            width: 86,
             align: 'center',
             render: (h, params) => {
               return h('div', [
+                // h('Button', {
+                //   props: {
+                //     type: 'primary',
+                //     size: 'small'
+                //   },
+                //   style: {
+                //     marginRight: '5px'
+                //   },
+                //   on: {
+                //     click: () => {
+                //       this.show(params.index)
+                //     }
+                //   }
+                // }, 'View'),
                 h('Button', {
                   props: {
                     type: 'primary',
                     size: 'small'
                   },
-                  style: {
-                    marginRight: '5px'
-                  },
                   on: {
                     click: () => {
-                      this.start(params.row.order_id, params.row.book_id, params.row.num)
+                      this.recorder(params.row.order_id, params.row.book_id);
                     }
                   }
-                 }, '发货'),
-                // h('Button', {
-                //   props: {
-                //     type: 'error',
-                //     size: 'small'
-                //   },
-                //   on: {
-                //     click: () => {
-                //       this.remove(params.index,params.row.order_id, params.row.book_id);
-                //     }
-                //   }
-                // }, 'Delete')
+                }, '评价')
               ]);
             }
           }

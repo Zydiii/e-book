@@ -20,14 +20,14 @@
           <FormItem label="标题" prop="title">
             <i-input v-model="formData.title" size="large"></i-input>
           </FormItem>
-          <!--<FormItem label="封面" prop="cover">-->
-            <!--<input type="file" @change="getFile($event)">-->
-          <!--</FormItem>-->
           <FormItem label="封面" prop="cover">
-            <Upload action="http://localhost:8088/image/upload">
-              <Button icon="ios-cloud-upload-outline">请上传图片</Button>
-            </Upload>
+            <input type="file" @change="getFile($event)">
           </FormItem>
+          <!--<FormItem label="封面" prop="cover">-->
+            <!--<Upload action="http://localhost:8088/image/upload">-->
+              <!--<Button icon="ios-cloud-upload-outline">请上传图片</Button>-->
+            <!--</Upload>-->
+          <!--</FormItem>-->
           <!--<FormItem label="封面" prop="cover">-->
             <!--<i-input v-model="formData.cover" size="large"></i-input>-->
           <!--</FormItem>-->
@@ -79,6 +79,41 @@
       });
     },
     methods: {
+      getBook: function(){
+        axios.get('http://localhost:8088/manager/books').then((response) => {
+          this.books = response.data;
+          var i = 0;
+          for (; i < this.books.length; i++) {
+            this.books[i].editting = 0;
+            this.books[i].saving = 0;
+          }
+          this.bookShow = this.books;
+        }).catch((error) => {
+          console.log(error);
+        })
+      },
+
+      submit: function (ISBN) {
+        //阻止元素发生默认的行为
+        //event.preventDefault();
+        let formData = new FormData();
+        formData.append("file", this.file);
+        console.log("ISBN");
+        console.log(ISBN);
+        let that = this;
+        axios.post('http://localhost:8088/image/upload?ISBN=' + ISBN, formData)
+          .then(function (response) {
+            //alert(response.data);
+            console.log(response);
+            that.getBook();
+            //window.location.reload();
+          })
+          .catch(function (error) {
+            alert("上传失败");
+            console.log(error);
+            //window.location.reload();
+          });
+      },
       getFile: function (event) {
         this.file = event.target.files[0];
         console.log(this.file);
@@ -102,17 +137,7 @@
                 this.$Message.success('成功添加书籍');
                 console.log(response);
                 this.changeLoading();
-                axios.get('http://localhost:8088/manager/books').then((response) => {
-                  this.books = response.data;
-                  var i = 0;
-                  for (; i < this.books.length; i++) {
-                    this.books[i].editting = 0;
-                    this.books[i].saving = 0;
-                  }
-                  this.bookShow = this.books;
-                }).catch((error) => {
-                  console.log(error);
-                })
+                this.submit(this.formData.ISBN);
               }).catch((error) => {
               console.log(error);
               this.$Message.error('连接出错，请稍后再试');
@@ -202,8 +227,8 @@
           title: '',
           writer: '',
           ISBN: '',
-          remains: 0,
-          price: 0.0,
+          remains: '',
+          price: '',
           intro: '',
           shopName: ''
         },
@@ -230,9 +255,6 @@
           ],
           shopName: [
             {required: true, message: '出版社不能为空', trigger: 'blur'}
-          ],
-          cover: [
-            {required: true, message: '封面不能为空', trigger: 'blur'}
           ]
         },
         columns: [
@@ -253,14 +275,34 @@
             width: 100,
             align: 'center',
             render: (h, params) => {
-              return h('div', [
-                h('img', {
-                  attrs: {
-                    src: params.row.cover,
-                    width: '80px'
+              if (params.row.$isEdit){
+                return h('input', {
+                  domProps: {
+                    //value: params.row.cover,
+                    type: "file",
+                    style: "width: 100%; align: center; margin: 0"
+                  },
+                  on: {
+                    getFile: function (event) {
+                      this.file = event.target.files[0];
+                      console.log(this.file);
+                    },
+                    // input: function (event) {
+                    //   params.row.cover = event.target.value
+                    // }
                   }
-                })
-              ]);
+                });
+              }
+              else{
+                return h('div', [
+                  h('img', {
+                    attrs: {
+                      src: params.row.cover,
+                      width: '80px'
+                    }
+                  })
+                ]);
+              }
             }
           },
           {

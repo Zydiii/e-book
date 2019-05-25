@@ -1,11 +1,9 @@
 package ebook.controller;
 
 import ebook.dao.BooksMapper;
+import ebook.dao.ItemsMapper;
 import ebook.dao.UserinfoMapper;
-import ebook.entity.Books;
-import ebook.entity.BooksExample;
-import ebook.entity.Userinfo;
-import ebook.entity.UserinfoExample;
+import ebook.entity.*;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +25,9 @@ public class ManagerController {
 
     @Autowired
     BooksMapper booksMapper;
+
+    @Autowired
+    ItemsMapper itemsMapper;
 
 //    @RequestMapping(path = "/addPic", method = RequestMethod.POST)
 //    @ResponseBody
@@ -94,6 +95,18 @@ public class ManagerController {
         newBook.setTime(date);
         booksMapper.insert(newBook);
         return "OK";
+    }
+
+    @RequestMapping(path="/sendOrder", method = RequestMethod.GET)
+    @ResponseBody
+    public String sendOrder(@RequestParam String order_id, @RequestParam int book_id){
+        ItemsExample itemsExample = new ItemsExample();
+        ItemsExample.Criteria criteria = itemsExample.createCriteria();
+        criteria.andBookIdEqualTo(book_id).andOrderIdEqualTo(order_id);
+        List<Items> o = itemsMapper.selectByExample(itemsExample);
+        o.get(0).setState(1);
+        itemsMapper.updateByExampleSelective(o.get(0), itemsExample);
+        return  "1";
     }
 
     @RequestMapping(path = "/updateBook", method = RequestMethod.POST)

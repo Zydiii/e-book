@@ -29,6 +29,28 @@
       });
     },
     methods: {
+      recorder(order_id, book_id){
+        axios.get("http://localhost:8088/home/recOrder?order_id=" + order_id + "&book_id=" + book_id)
+          .then((response) => {
+            console.log(response);
+            if(response.data == "1"){
+              this.$Message.success("您已成功收货，请及时评价");
+              var str = sessionStorage.getItem("userInfo");
+              var s = JSON.parse(str);
+              this.id = s.id;
+              axios.get('http://localhost:8088/home/order?ID=' + this.id.toString()).then((response) => {
+                this.order = response.data;
+                this.orderShow = this.order;
+                console.log(typeof(response.data[0].order_time));
+              }).catch((error) => {
+                console.log(error);
+              })
+            }
+            else{
+              this.$Message.error("连接出错，请重试");
+            }
+          })
+      },
       search(data, argumentObj) {
         let res = data;
         let dataClone = data;
@@ -121,6 +143,12 @@
             align: 'center'
           },
           {
+            title: '状态',
+            width: 68,
+            key: 'state',
+            align: 'center'
+          },
+          {
             title: '操作',
             key: 'action',
             width: 150,
@@ -143,6 +171,17 @@
                 // }, 'View'),
                 h('Button', {
                   props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.recorder(params.row.order_id, params.row.book_id);
+                    }
+                  }
+                }, '收货'),
+                h('Button', {
+                  props: {
                     type: 'error',
                     size: 'small'
                   },
@@ -151,7 +190,7 @@
                       this.remove(params.index,params.row.order_id, params.row.book_id);
                     }
                   }
-                }, 'delete')
+                }, '删除')
               ]);
             }
           }

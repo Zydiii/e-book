@@ -69,6 +69,18 @@ public class HomeController {
         return my;
     }
 
+    @RequestMapping(path="/recOrder", method = RequestMethod.GET)
+    @ResponseBody
+    public String recOrder(@RequestParam String order_id, @RequestParam int book_id){
+        ItemsExample itemsExample = new ItemsExample();
+        ItemsExample.Criteria criteria = itemsExample.createCriteria();
+        criteria.andBookIdEqualTo(book_id).andOrderIdEqualTo(order_id);
+        List<Items> o = itemsMapper.selectByExample(itemsExample);
+        o.get(0).setState(2);
+        itemsMapper.updateByExampleSelective(o.get(0), itemsExample);
+        return  "1";
+    }
+
     @RequestMapping(path = "/orderAll", method = RequestMethod.GET)
     @ResponseBody
     public List<OrderBook> getOrderAll(){
@@ -101,6 +113,7 @@ public class HomeController {
                 orderBook.setCover(ook.get(0).getCover());
                 orderBook.setISBN(ook.get(0).getIsbn());
                 orderBook.setWriter(ook.get(0).getWriter());
+                orderBook.setState(o.get(j).getState());
                 my.add(orderBook);
             }
         }
@@ -142,11 +155,14 @@ public class HomeController {
                 orderBook.setCover(ook.get(0).getCover());
                 orderBook.setISBN(ook.get(0).getIsbn());
                 orderBook.setWriter(ook.get(0).getWriter());
+                orderBook.setState(o.get(j).getState());
                 my.add(orderBook);
             }
         }
         return my;
     }
+
+
 
     @RequestMapping(path = "/deleteOrder", method = RequestMethod.GET)
     @ResponseBody

@@ -23,7 +23,8 @@ const ManageUser = resolve => require(['@/components/home/ManageUser'], resolve)
 const ManageBook = resolve => require(['@/components/home/ManageBook'], resolve);
 const Default = resolve => require(['@/components/home/Default'], resolve);
 const ManageOrder = resolve => require(['@/components/home/ManageOrder'], resolve);
-const tmp = resolve => require(['@/components/temp'], resolve);
+const EvalOrder = resolve => require(['@/components/home/EvalOrder'], resolve);
+const SeeOrder = resolve => require(['@/components/home/SeeOrder'], resolve);
 
 Vue.use(Router)
 
@@ -142,9 +143,19 @@ export default new Router({
           component: MyOrder
         },
         {
+          path: 'seeOrder',
+          name: 'SeeOrder',
+          component: SeeOrder
+        },
+        {
           path: 'timeOrder',
           name: 'TimeOrder',
           component: TimeOrder
+        },
+        {
+          path: 'evalOrder',
+          name: 'EvalOrder',
+          component: EvalOrder
         },
         {
           path: 'myShoppingCart',

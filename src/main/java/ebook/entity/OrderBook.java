@@ -15,6 +15,15 @@ public class OrderBook {
     String cover;
     String ISBN;
     String writer;
+    int state;
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
 
     public String getISBN() {
         return ISBN;

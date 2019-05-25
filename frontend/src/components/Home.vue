@@ -23,6 +23,7 @@
             </template>
             <MenuItem name="myOrder">我的订单</MenuItem>
             <MenuItem name="timeOrder">统计订单</MenuItem>
+            <MenuItem name="evalOrder">评价订单</MenuItem>
           </Submenu>
           <!--<Submenu name="3" v-show=!this.isManager>-->
             <!--<template slot="title">-->
@@ -44,6 +45,7 @@
               <span>订单管理</span>
             </template>
             <MenuItem name="manageOrder">所有订单</MenuItem>
+            <MenuItem name="seeOrder">统计订单</MenuItem>
           </Submenu>
           <Submenu name="6" v-show=this.isManager>
             <template slot="title">
@@ -89,7 +91,9 @@
           'manageUser': '用户清单',
           'default': '欢迎登陆',
           'manageOrder': '订单管理',
-          'manageBook': '书籍清单'
+          'manageBook': '书籍清单',
+          'evalOrder': '评价订单',
+          'seeOrder': '统计订单'
         }
       };
     },

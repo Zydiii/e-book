@@ -8,7 +8,7 @@ public class OrderitemKey {
      *
      * @mbg.generated
      */
-    private Integer orderId;
+    private String orderId;
 
     /**
      *
@@ -27,7 +27,7 @@ public class OrderitemKey {
      *
      * @mbg.generated
      */
-    public Integer getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
@@ -39,8 +39,8 @@ public class OrderitemKey {
      *
      * @mbg.generated
      */
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId == null ? null : orderId.trim();
     }
 
     /**
