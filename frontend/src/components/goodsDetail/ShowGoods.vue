@@ -3,7 +3,7 @@
     <div class="item-detail-show">
       <div class="item-detail-left">
         <div class="item-detail-big-img">
-          <img :src="goodsInfo.cover" alt="">
+          <img :src="'http://localhost:8088/image/' + goodsInfo.cover" alt="">
         </div>
         <!--<div class="item-detail-img-row">-->
           <!--<div class="item-detail-img-small" v-for="(item, index) in goodsInfo.goodsImg" :key="index" @mouseover="showBigImg(index)">-->

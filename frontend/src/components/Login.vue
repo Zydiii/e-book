@@ -93,6 +93,7 @@
           'password': this.formDate.password
         }).then((response) => {
           var status = response.data;
+          // console.log(response);
           if (status.in === 1) {
             this.$Message.success('登陆成功');
             console.log("log1");

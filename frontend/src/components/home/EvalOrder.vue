@@ -5,7 +5,24 @@
         <Button slot="append" icon="md-search" @click="handleSearch" ></Button>
       </i-input>
     </div>
-    <Table border :columns="columns" :data="orderShow" no-data-text="您还没有已经完成的订单~"></Table>
+    <Table border :columns="columns" :data="orderShow" no-data-text="您还没有需要评价的订单~"></Table>
+
+    <Modal v-model="model" width="530" @on-ok="commentBook" :rules="ruleInline">
+      <p slot="header">
+        <Icon type="edit"></Icon>
+        <span>书籍评价</span>
+      </p>
+      <div>
+        <Form :model="formData" label-position="left" :label-width="100" >
+          <FormItem lable="评分" prop="star">
+            <Rate allow-half :value.sync="valueHalf"></Rate>
+          </FormItem>
+          <FormItem label="评价" prop="comment">
+            <Input v-model="formData.comment" type="textarea" :autosize="{minRows: 2,maxRows: 5}"></Input>
+          </FormItem>
+        </Form>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -17,18 +34,42 @@
     components: {MyOrderExpand},
     name: 'EvalOrder',
     created() {
-      var str = sessionStorage.getItem("userInfo");
-      var s = JSON.parse(str);
-      this.id = s.id;
-      axios.get('http://localhost:8088/home/order?ID=' + this.id.toString()).then((response) => {
-        this.order = response.data;
-        this.orderShow = this.order;
-        console.log(typeof(response.data[0].order_time));
-      }).catch((error) => {
-        console.log(error);
-      });
+      this.getOrder();
     },
     methods: {
+      getOrder(){
+        var str = sessionStorage.getItem("userInfo");
+        var s = JSON.parse(str);
+        this.id = s.id;
+        axios.get('http://localhost:8088/home/orderEval?ID=' + this.id.toString()).then((response) => {
+          this.order = response.data;
+          this.orderShow = this.order;
+          console.log(typeof(response.data[0].order_time));
+        }).catch((error) => {
+          console.log(error);
+        });
+      },
+      commentBook() {
+        this.formData.order_id = this.msg;
+        this.formData.book_id = this.msg1;
+        this.formData.star = this.valueHalf;
+
+        var str = sessionStorage.getItem("userInfo");
+        this.formData.logid = JSON.parse(str).logid;
+        console.log(this.formData);
+        axios.post("http://localhost:8088/comment/commentBook", this.formData)
+          .then((response) => {
+            console.log(this.formData);
+            console.log(response);
+            this.$Message.success("您已成功评价！");
+            this.getOrder();
+          }).catch((error) => {
+          console.log(this.formData);
+
+          this.$Message.error("连接失败，请稍候再试！");
+            console.log(error);
+        });
+      },
       recorder(order_id, book_id){
         axios.get("http://localhost:8088/home/recOrder?order_id=" + order_id + "&book_id=" + book_id)
           .then((response) => {
@@ -68,12 +109,6 @@
         this.orderShow = this.order;
         this.orderShow = this.search(this.order, {title: this.searchData});
       },
-      // show (index) {
-      //   this.$Modal.info({
-      //     title: 'User Info',
-      //     content: `Name：${this.order[index].name}<br>Age：${this.order[index].age}<br>Address：${this.data6[index].address}`
-      //   })
-      // },
       remove(index, orderid, bookid) {
         this.order.splice(index, 1);
         axios.get('http://localhost:8088/home/deleteOrder?order_id=' + orderid.toString() + '&book_id=' + bookid.toString())
@@ -89,8 +124,24 @@
       return {
         order: [],
         orderShow: [],
+        msg:'',
+        msg1:'',
+        model: false,
         id: 0,
         searchData: "",
+        valueHalf: 5,
+        formData: {
+          star: '',
+          comment: '',
+          order_id: '',
+          book_id: '',
+          logid: ''
+        },
+        ruleInline: {
+          comment: [
+            {required: true, message: '评价不能为空', trigger: 'blur'}
+          ]
+        },
         columns: [
           {
             type: 'expand',
@@ -111,7 +162,7 @@
               return h('div', [
                 h('img', {
                   attrs: {
-                    src: params.row.cover,
+                    src: 'http://localhost:8088/image/' + params.row.cover,
                     width: "80px"
                   }
                 })
@@ -149,20 +200,6 @@
             align: 'center',
             render: (h, params) => {
               return h('div', [
-                // h('Button', {
-                //   props: {
-                //     type: 'primary',
-                //     size: 'small'
-                //   },
-                //   style: {
-                //     marginRight: '5px'
-                //   },
-                //   on: {
-                //     click: () => {
-                //       this.show(params.index)
-                //     }
-                //   }
-                // }, 'View'),
                 h('Button', {
                   props: {
                     type: 'primary',
@@ -170,7 +207,9 @@
                   },
                   on: {
                     click: () => {
-                      this.recorder(params.row.order_id, params.row.book_id);
+                      this.model = 1;
+                      this.msg = params.row.order_id;
+                      this.msg1 = params.row.book_id;
                     }
                   }
                 }, '评价')

@@ -156,6 +156,16 @@ public class ManagerServiceImp implements ManagerService {
         return "OK";
     }
 
+    public String updateCover(String cover1, String cover2){
+        BooksExample booksExample = new BooksExample();
+        BooksExample.Criteria criteria = booksExample.createCriteria();
+        criteria.andCoverEqualTo(cover1);
+        List<Books> o = booksMapper.selectByExample(booksExample);
+        o.get(0).setCover(cover2);
+        booksMapper.updateByExampleSelective(o.get(0), booksExample);
+        return "OK";
+    }
+
     public String delBook(@RequestParam String id){
         BooksExample booksExample = new BooksExample();
         BooksExample.Criteria criteria = booksExample.createCriteria();

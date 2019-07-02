@@ -59,6 +59,9 @@ public class ManagerControllerImp implements ManagerController {
         return managerService.updateBook(row);
     }
 
+    @RequestMapping(path = "/updateCover", method = RequestMethod.GET)
+    public String updateCover(@RequestParam String cover1, @RequestParam String cover2){ return managerService.updateCover(cover1, cover2); }
+
     @RequestMapping(path = "/deleteBook", method = RequestMethod.GET)
     @ResponseBody
     public String delBook(@RequestParam String id){
@@ -82,4 +85,6 @@ public class ManagerControllerImp implements ManagerController {
     public List<Userinfo> changeYUsers(@RequestBody Userinfo user){
         return managerService.changeYUsers(user);
     }
+
+
 }

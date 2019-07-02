@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @MapperScan(value = "ebook.dao")
 @SpringBootApplication
+
 public class SpringBootDataMybatisApplication {
 
 	public static void main(String[] args) {

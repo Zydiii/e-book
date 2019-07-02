@@ -16,7 +16,7 @@
       </Row>
     </div>
     <div>
-      <Table border :columns="columns" :data="bookShow" no-data-text="请您添加书籍~"></Table>
+      <Table border :columns="columns" :data="bookShow" no-data-text="~"></Table>
     </div>
 
 

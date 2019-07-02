@@ -19,6 +19,7 @@ public interface ManagerService {
     public String addBook(Map<String, String> formData);
     public String sendOrder(String order_id, int book_id);
     public String updateBook(Books row);
+    public String updateCover(String cover1, String cover2);
     public String delBook(String id);
     public List<Userinfo> getUsers();
     public List<Userinfo> changeNUsers(Userinfo user);

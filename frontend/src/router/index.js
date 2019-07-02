@@ -26,6 +26,7 @@ const ManageOrder = resolve => require(['@/components/home/ManageOrder'], resolv
 const EvalOrder = resolve => require(['@/components/home/EvalOrder'], resolve);
 const SeeOrder = resolve => require(['@/components/home/SeeOrder'], resolve);
 const SeeUser = resolve => require(['@/components/home/SeeUser'], resolve);
+const temp = resolve => require(['@/components/temp'], resolve);
 
 Vue.use(Router)
 

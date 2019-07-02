@@ -155,6 +155,58 @@ public class HomeServiceImp implements HomeService {
         return my;
     }
 
+    public String commentBook(@RequestBody Comment comment){
+        ItemsExample itemsExample = new ItemsExample();
+        ItemsExample.Criteria criteria = itemsExample.createCriteria();
+        criteria.andBookIdEqualTo(comment.getBook_id()).andOrderIdEqualTo(comment.getOrder_id());
+        List<Items> o = itemsMapper.selectByExample(itemsExample);
+        o.get(0).setState(3);
+        itemsMapper.updateByExampleSelective(o.get(0), itemsExample);
+
+
+
+        return "ok";
+    }
+
+    public List<OrderBook> getOrderEval(@RequestParam int ID){
+        OrdersExample ordersExample = new OrdersExample();
+        OrdersExample.Criteria criteria = ordersExample.createCriteria();
+        criteria.andUserIdEqualTo(ID);
+        List<Orders> g = ordersMapper.selectByExample(ordersExample);
+        List<OrderBook> my = new ArrayList<OrderBook>();
+
+        for(int i=0; i<g.size(); i++){
+            String id = g.get(i).getId();
+            ItemsExample itemsExample = new ItemsExample();
+            ItemsExample.Criteria criteria1 = itemsExample.createCriteria();
+            criteria1.andOrderIdEqualTo(id).andSeeEqualTo(1).andStateEqualTo(2);
+            List<Items> o = itemsMapper.selectByExample(itemsExample);
+            for(int j=0; j < o.size(); j++){
+                OrderBook orderBook = new OrderBook();
+                orderBook.setNum(o.get(j).getNum());
+                orderBook.setOrder_id(o.get(j).getOrderId());
+                orderBook.setOrder_time(g.get(i).getOdertime());
+                BooksExample booksExample = new BooksExample();
+                BooksExample.Criteria criteria2 = booksExample.createCriteria();
+                criteria2.andIdEqualTo(o.get(j).getBookId());
+                List<Books> ook = booksMapper.selectByExample(booksExample);
+                float price = ook.get(0).getPrice();
+                orderBook.setPrice(price * o.get(j).getNum());
+                orderBook.setTitle(ook.get(0).getTitle());
+                orderBook.setBook_id(ook.get(0).getId());
+                orderBook.setReceiverAddress(g.get(i).getReceiveraddress());
+                orderBook.setReceiverName(g.get(i).getReceivername());
+                orderBook.setReceiverPhone(g.get(i).getReceiverphone());
+                orderBook.setCover(ook.get(0).getCover());
+                orderBook.setISBN(ook.get(0).getIsbn());
+                orderBook.setWriter(ook.get(0).getWriter());
+                orderBook.setState(o.get(j).getState());
+                my.add(orderBook);
+            }
+        }
+        return my;
+    }
+
     public Cart deleteOrder(@RequestParam String order_id, @RequestParam String book_id){
         ItemsExample itemsExample = new ItemsExample();
         ItemsExample.Criteria criteria1 = itemsExample.createCriteria();

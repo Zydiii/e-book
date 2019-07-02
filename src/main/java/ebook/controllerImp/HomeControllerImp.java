@@ -19,6 +19,12 @@ public class HomeControllerImp implements HomeController {
         return homeService.getTime(time);
     }
 
+    @RequestMapping(path = "/commentBook", method = RequestMethod.POST)
+    @ResponseBody
+    public String commentBook(@RequestBody Comment comment){
+        return homeService.commentBook(comment);
+    }
+
     @RequestMapping(path="/recOrder", method = RequestMethod.GET)
     @ResponseBody
     public String recOrder(@RequestParam String order_id, @RequestParam int book_id){
@@ -35,6 +41,12 @@ public class HomeControllerImp implements HomeController {
     @ResponseBody
     public List<OrderBook> getOrder(@RequestParam int ID){
         return homeService.getOrder(ID);
+    }
+
+    @RequestMapping(path = "/orderEval", method = RequestMethod.GET)
+    @ResponseBody
+    public List<OrderBook> getOrderEval(@RequestParam int ID){
+        return homeService.getOrderEval(ID);
     }
 
     @RequestMapping(path = "/deleteOrder", method = RequestMethod.GET)

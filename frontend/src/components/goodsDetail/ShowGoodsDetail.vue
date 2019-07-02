@@ -8,7 +8,7 @@
         <div class="item-intro-recommend-column">
           <div class="item-recommend-column" >
             <div class="item-recommend-img">
-              <img :src="goodsInfo.cover" alt="">
+              <img :src="'http://localhost:8088/image/' + goodsInfo.cover" alt="">
             </div>
             <div class="item-recommend-intro">
               <span>
@@ -26,10 +26,6 @@
                   <div class="remarks-title">书籍简介</div>
                 </span>
               {{goodsInfo.intro}}
-              <!--<span class="item-param-box" v-for="(item,index) in goodsInfo.goodsDetail" :key="index">-->
-                  <!--<div class="remarks-title">{{item.title}}</div>-->
-                  <!--<span class="item-param-content">{{item.content}}</span>-->
-                <!--</span>-->
 
             </TabPane>
             <TabPane label="书籍信息">
@@ -37,56 +33,31 @@
                 <span class="item-param-box">
                   ISBN: {{goodsInfo.isbn}}
                 </span>
-                <!--<span class="item-param-box">-->
-                  <!--出版时间: {{goodsInfo.time}}-->
-                <!--</span>-->
-                <!--<span class="item-param-box" v-for="(item,index) in goodsInfo.param" :key="index">-->
-                  <!--<span class="item-param-title">{{item.title}}: </span>-->
-                  <!--<span class="item-param-content">{{item.content}}</span>-->
-                <!--</span>-->
+
                 <span class="item-param-box">
                   <span class="item-param-title"> </span>
                 </span>
               </div>
             </TabPane>
             <TabPane label="书籍评价">
-              <!--<div class="remarks-container">-->
-                <!--<div class="remarks-title">-->
-                  <!--<span>书籍评价</span>-->
-                <!--</div>-->
-                <!--<div class="remarks-analyse-box">-->
-                  <!--<div class="remarks-analyse-goods">-->
-                    <!--<i-circle :percent="goodsInfo.remarks" stroke-color="#e4393c">-->
-                      <!--<span class="remarks-analyse-num">{{goodsInfo.remarks}}%</span>-->
-                      <!--<p class="remarks-analyse-title">好评率</p>-->
-                    <!--</i-circle>-->
-                  <!--</div>-->
-                  <!--<div class="remarks-analyse-tags">-->
-                    <!--<Tag checkable :color="tagsColor[index % 4]" v-for="(item,index) in goodsInfo.remarks" :key="index">{{item}}</Tag>-->
-                  <!--</div>-->
-                <!--</div>-->
-                <!--&lt;!&ndash;<div class="remarks-bar">&ndash;&gt;-->
-                  <!--&lt;!&ndash;<span>全部({{goodsInfo.remarks.remarksNumDetail[0]}})</span>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<span>好评({{goodsInfo.remarks.remarksNumDetail[1]}})</span>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<span>中评({{goodsInfo.remarks.remarksNumDetail[2]}})</span>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<span>差评({{goodsInfo.remarks.remarksNumDetail[3]}})</span>&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                <!--<div class="remarks-box" v-for="(item,index) in goodsInfo.remarks" :key="index">-->
-                  <!--<div class="remarks-user">-->
-                    <!--<Avatar icon="person" />-->
-                    <!--<span class="remarks-user-name">{{item.username}}</span>-->
-                  <!--</div>-->
-                  <!--<div class="remarks-content-box">-->
-                    <!--<p>-->
-                      <!--<Rate disabled :value="item.values" allow-half class="remarks-star"></Rate>-->
-                    <!--</p>-->
-                    <!--<p class="remarks-content">{{item.content}}</p>-->
-                    <!--<p class="remarks-sub">-->
-                      <!--<span class="remarks-time">{{item.time}}</span>-->
-                    <!--</p>-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</div>-->
+              <div>
+                <div class="remarks-box" v-for="(item, index) in this.comments" :key="index" >
+                  <div class="remarks-user">
+                    <p class="username-p">
+                      <Avatar class="person-icon" icon="md-person" size="small" /> <span class="username">{{item.logid}} </span>
+                    </p>
+                  </div>
+                  <div class="remarks-content-box">
+                    <p>
+                      <Rate disabled :value="item.star" allow-half class="remarks-star"></Rate>
+                    </p>
+                    <p class="remarks-content">{{item.comment}}</p>
+                    <p class="remarks-sub">
+                      <span class="remarks-time">{{item.time}}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </TabPane>
           </Tabs>
         </div>
@@ -104,7 +75,8 @@
     data () {
       return {
         tagsColor: [ 'blue', 'green', 'red', 'yellow' ],
-        goodsInfo: []
+        goodsInfo: [],
+        comments: []
       };
     },
     mounted: function () {
@@ -112,44 +84,23 @@
       axios.get('http://localhost:8088/book/detail?ID='+this.id.toString())
         .then((response) => {
           this.goodsInfo = response.data;
-          // console.log("goodsdetail1");
-          // console.log(this.goodsInfo);
-          // console.log("goodsdetail2");
-          // console.log(response);
+        }).catch((error) => {
+        console.log(error);
+      });
+      axios.get('http://localhost:8088/comment/getCommentBook?ID='+this.id.toString())
+        .then((response) => {
+          this.comments = response.data;
+          console.log(this.comments);
         }).catch((error) => {
         console.log(error);
       });
 
     },
-    // created() {
-    //   var str = sessionStorage.bookDetail;
-    //   console.log(
-    //     (str));
-    //   console.log(
-    //     (str.id))
-    //   //logState = sessionStorage.obj;
-    //   this.goodsInfo = JSON.parse(str);
-    //   console.log(this.goodsInfo);
-    // },
-    // computed: {
-    //   ...mapState(['goodsInfo'])
-    // },
-    // mounted: function () {
-    //   axios.get('http://localhost:8088/book/detail')
-    //     .then((response) => {
-    //       this.goodsInfo = response.data;
-    //       console.log(response);
-    //     }).catch((error) => {
-    //     console.log(error);
-    //   });
-    //
-    // },
     store
   };
 </script>
 
 <style scoped>
-  /***************商品详情介绍和推荐侧边栏开始***************/
   .item-intro-show{
     width: 80%;
     margin: 15px auto;
@@ -159,6 +110,7 @@
   }
   .item-intro-recommend{
     width: 200px;
+    height: 700px;
     display: flex;
     flex-direction: column;
   }
@@ -331,7 +283,7 @@
 </style>
 
 <style>
-  /* 改变便签页样式 */
+
   .ivu-tabs-ink-bar {
     background-color: #25b7c4 !important;
   }

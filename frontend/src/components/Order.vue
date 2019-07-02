@@ -75,7 +75,7 @@
               return h('div', [
                 h('img', {
                   attrs: {
-                    src: params.row.cover,
+                    src: 'http://localhost:8088/image/' + params.row.cover,
                     width: '100px'
                   }
                 })

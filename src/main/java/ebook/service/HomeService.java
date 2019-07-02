@@ -1,6 +1,7 @@
 package ebook.service;
 
 import ebook.entity.Cart;
+import ebook.entity.Comment;
 import ebook.entity.Find;
 import ebook.entity.OrderBook;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,5 +16,8 @@ public interface HomeService {
     public String recOrder(String order_id, int book_id);
     public List<OrderBook> getOrderAll();
     public List<OrderBook> getOrder(int ID);
+    public List<OrderBook> getOrderEval(int ID);
+    public String commentBook(Comment comment);
     public Cart deleteOrder(String order_id, String book_id);
+
 }

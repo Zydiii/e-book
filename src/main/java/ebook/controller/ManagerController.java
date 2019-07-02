@@ -28,6 +28,9 @@ public interface ManagerController {
     @RequestMapping(path = "/updateBook", method = RequestMethod.POST)
     @ResponseBody
     public String updateBook(Books row);
+    @RequestMapping(path = "/updateCover", method = RequestMethod.GET)
+    @ResponseBody
+    public String updateCover(String cover1, String cover2);
     @RequestMapping(path = "/deleteBook", method = RequestMethod.GET)
     @ResponseBody
     public String delBook(String id);
@@ -40,4 +43,5 @@ public interface ManagerController {
     @RequestMapping(path = "/changeY", method = RequestMethod.POST)
     @ResponseBody
     public List<Userinfo> changeYUsers(Userinfo user);
+
 }

@@ -5,11 +5,32 @@
         <Button slot="append" icon="md-search" @click="handleSearch"></Button>
       </i-input>
     </div>
-    <Table border :columns="columns" :data="bookShow" no-data-text="请您添加书籍~"></Table>
+    <Table border :columns="columns" :data="bookShow" no-data-text="请您添加书籍"></Table>
     <Button type="primary" @click="edit(index)">
       <Icon type="md-add"/>
       添加书籍
     </Button>
+
+    <Modal v-model="modal1" width="630" @on-ok="changeCover">
+      <p slot="header">
+        <Icon type="edit"></Icon>
+        <span>修改封面</span>
+      </p>
+      <div>
+        <Form :model="formData1" label-position="left" :label-width="100">
+          <FormItem lable="原始图片" prop="cover1">
+            <img :src="'http://localhost:8088/image/'+ this.msg" width="90%">
+          </FormItem>
+          <FormItem label="更换图片" prop="cover2">
+            <Upload action="http://localhost:8088/image/uploadImage" method="post" enctype="multipart/form-data" :on-success="uploadSuccess1">
+              <Button icon="ios-cloud-upload-outline">Upload files</Button>
+            </Upload>
+            <img :src="'http://localhost:8088/image/'+ this.msg1" width="90%">
+          </FormItem>
+        </Form>
+      </div>
+    </Modal>
+
     <Modal v-model="modal" width="530" @on-ok="ok" :loading="loading">
       <p slot="header">
         <Icon type="edit"></Icon>
@@ -20,17 +41,14 @@
           <FormItem label="标题" prop="title">
             <i-input v-model="formData.title" size="large"></i-input>
           </FormItem>
+<!--          <FormItem label="封面" prop="cover">-->
+<!--            <input type="file" @change="getFile($event)">-->
+<!--          </FormItem>-->
           <FormItem label="封面" prop="cover">
-            <input type="file" @change="getFile($event)">
+            <Upload action="http://localhost:8088/image/uploadImage" method="post" enctype="multipart/form-data" :on-success="uploadSuccess">
+              <Button icon="ios-cloud-upload-outline">Upload files</Button>
+            </Upload>
           </FormItem>
-          <!--<FormItem label="封面" prop="cover">-->
-            <!--<Upload action="http://localhost:8088/image/upload">-->
-              <!--<Button icon="ios-cloud-upload-outline">请上传图片</Button>-->
-            <!--</Upload>-->
-          <!--</FormItem>-->
-          <!--<FormItem label="封面" prop="cover">-->
-            <!--<i-input v-model="formData.cover" size="large"></i-input>-->
-          <!--</FormItem>-->
           <FormItem label="作者" prop="writer">
             <i-input v-model="formData.writer" size="large"></i-input>
           </FormItem>
@@ -79,6 +97,21 @@
       });
     },
     methods: {
+      uploadSuccess(response, file, fileList) {
+        this.formData.cover = response;
+      },
+      uploadSuccess1(response, file, fileList) {
+        this.msg1 = response;
+      },
+      changeCover() {
+        console.log(this.msg);
+        console.log(this.msg1);
+        axios.get('http://localhost:8088/manager/updateCover?cover1=' + this.msg + '&cover2=' + this.msg1)
+          .then((response) => {
+            console.log(response);
+            this.getBook();
+          })
+      },
       getBook: function(){
         axios.get('http://localhost:8088/manager/books').then((response) => {
           this.books = response.data;
@@ -137,7 +170,8 @@
                 this.$Message.success('成功添加书籍');
                 console.log(response);
                 this.changeLoading();
-                this.submit(this.formData.ISBN);
+                this.getBook();
+                //this.submit(this.formData.ISBN);
               }).catch((error) => {
               console.log(error);
               this.$Message.error('连接出错，请稍后再试');
@@ -148,7 +182,6 @@
       edit(index) {
         this.modal = true;
       },
-
       handleEdit(row) {
         this.$set(row, '$isEdit', true)
 
@@ -217,6 +250,9 @@
     data() {
       return {
         modal: false,
+        modal1:false,
+        msg: '',
+        msg1:'',
         books: [],
         bookShow: [],
         loading: true,
@@ -231,6 +267,10 @@
           price: '',
           intro: '',
           shopName: ''
+        },
+        formData1: {
+          cover1: '',
+          cover2:''
         },
         ruleInline: {
           title: [
@@ -270,39 +310,38 @@
             }
           },
           {
-            title: '图片',
+            title: '封面',
             key: 'img',
             width: 100,
             align: 'center',
             render: (h, params) => {
-              // if (params.row.$isEdit){
-              //   return h('input', {
-              //     domProps: {
-              //       //value: params.row.cover,
-              //       type: "file",
-              //       style: "width: 100%; align: center; margin: 0"
-              //     },
-              //     on: {
-              //       getFile: function (event) {
-              //         this.file = event.target.files[0];
-              //         console.log(this.file);
-              //       },
-              //       // input: function (event) {
-              //       //   params.row.cover = event.target.value
-              //       // }
-              //     }
-              //   });
-              // }
-              //else{
+              let that = this;
+              if (params.row.$isEdit){
+                return h('Button', {
+                  attrs: {
+                    icon: 'ios-cloud-upload-outline',
+                    type: 'primary',
+                  },
+                  on: {
+                    click: function(event){
+                      console.log("1");
+                      that.modal1 = true;
+                      that.msg = params.row.cover;
+                    }
+                  }
+                }
+                );
+              }
+              else{
                 return h('div', [
                   h('img', {
                     attrs: {
-                      src: params.row.cover,
+                      src: 'http://localhost:8088/image/'+ params.row.cover,
                       width: '80px'
                     }
                   })
                 ]);
-             // }
+              }
             }
           },
           {

@@ -10,7 +10,7 @@
           </div>
           <div class="item-as" v-for="(item,index) in asItems" :key="index">
             <div class="item-as-img" @click="link(asItems.id)">
-              <img :src="item.cover" alt="" width="150px" height="150px">
+              <img :src="'http://localhost:8088/image/' + item.cover" alt="" width="150px" height="150px">
             </div>
             <div class="item-as-price">
               <span>
@@ -38,7 +38,7 @@
             <div class="goods-show-info" v-for="(item, index) in GoodsList" :key="index"
                  v-show="search(item.title, item.writer)">
               <div class="goods-show-img" @click="link(item.id)">
-                <img :src="item.cover" />
+                <img :src="'http://localhost:8088/image/' + item.cover" width="100%"/>
               </div>
               <div class="goods-show-price">
                 <span>

@@ -9,6 +9,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/home")
 public interface HomeController {
+    @RequestMapping(path = "/commentBook", method = RequestMethod.POST)
+    @ResponseBody
+    String commentBook(Comment comment);
     @RequestMapping(path = "/gettime", method = RequestMethod.POST)
     @ResponseBody
     List<OrderBook> getTime(Find time) throws Exception;
@@ -21,7 +24,11 @@ public interface HomeController {
     @RequestMapping(path = "/order", method = RequestMethod.GET)
     @ResponseBody
     List<OrderBook> getOrder(int ID);
+    @RequestMapping(path = "/orderEval", method = RequestMethod.GET)
+    @ResponseBody
+    List<OrderBook> getOrderEval(int ID);
     @RequestMapping(path = "/deleteOrder", method = RequestMethod.GET)
     @ResponseBody
     Cart deleteOrder(String order_id, String book_id);
+
 }

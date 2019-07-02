@@ -1,16 +1,12 @@
 <template>
     <div class="hello">
         <h1>{{ msg }}</h1>
-        <form>
-            <input type="file" @change="getFile($event)">
-            <button class="button button-primary button-pill button-small" @click="submit($event)">提交</button>
-        </form>
 
-        <Upload action="http://localhost:8088/image/upload">
+        <Upload action="http://localhost:8088/image/uploadImage" method="post" enctype="multipart/form-data" :on-success="uploadSuccess">
             <Button icon="ios-cloud-upload-outline">Upload files</Button>
         </Upload>
 
-        <img src="http://localhost:8088/image/2019030515454352754.jpg">
+        <img :src="'http://localhost:8088/image/'+msg">
     </div>
 </template>
 
@@ -26,6 +22,9 @@
             }
         },
         methods: {
+            uploadSuccess(response, file, fileList) {
+                this.msg = response;
+            },
             getFile: function (event) {
                 this.file = event.target.files[0];
                 console.log(this.file);

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="fff">
     <footer class="footer">
       <div class="icon-row">
         <div class="footer-icon">
